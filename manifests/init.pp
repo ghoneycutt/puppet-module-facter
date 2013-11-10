@@ -18,6 +18,11 @@ class facter (
 
   validate_absolute_path($facts_d_dir)
 
+  validate_re($facts_d_mode,
+    '^\d{4}$',
+    "facter::facts_d_mode must be a four digit mode. Detected value is <755>."
+  )
+
   package { 'facter':
     ensure => $package_ensure,
     name   => $package_name,

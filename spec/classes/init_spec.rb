@@ -93,4 +93,15 @@ describe 'facter' do
       }.to raise_error(Puppet::Error)
     end
   end
+
+  context 'with invalid facts_d_mode param' do
+    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:params) { { :facts_d_mode => '755' } }
+
+    it do
+      expect {
+        should include_class('facter')
+      }.to raise_error(Puppet::Error,/facter::facts_d_mode must be a four digit mode. Detected value is <755>./)
+    end
+  end
 end
