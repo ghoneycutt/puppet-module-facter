@@ -1,41 +1,36 @@
 # == Class: facter
 #
-# Full description of class facter here.
+# Manage facter
 #
-# === Parameters
-#
-# Document parameters here.
-#
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
-#
-# === Variables
-#
-# Here you should define a list of variables that this module would require.
-#
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if it
-#   has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should not be used in preference to class parameters  as of
-#   Puppet 2.6.)
-#
-# === Examples
-#
-#  class { facter:
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ]
-#  }
-#
-# === Authors
-#
-# Author Name <author@domain.com>
-#
-# === Copyright
-#
-# Copyright 2013 Your name here, unless otherwise noted.
-#
-class facter {
+class facter (
+  $package_name   = 'facter',
+  $package_ensure = 'present',
+  $facts_d_dir    = '/etc/facter/facts.d',
+  $facts_d_owner  = 'root',
+  $facts_d_group  = 'root',
+  $facts_d_mode   = '0755',
+) {
 
+  validate_re($package_ensure,
+    '^(present)|(absent)$',
+    "facter::package_ensure must be \'present\' or \'absent\'. Detected value is <${package_ensure}>."
+  )
 
+  validate_absolute_path($facts_d_dir)
+
+  package { 'facter':
+    ensure => $package_ensure,
+    name   => $package_name,
+  }
+
+  common::mkdir_p { $facts_d_dir: }
+
+  file { 'facts_d_directory':
+    ensure  => 'directory',
+    path    => $facts_d_dir,
+    owner   => $facts_d_owner,
+    group   => $facts_d_group,
+    mode    => $facts_d_mode,
+    require => Common::Mkdir_p[$facts_d_dir],
+  }
 }
