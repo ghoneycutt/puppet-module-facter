@@ -16,6 +16,12 @@ This module is built for use with Puppet v3
 # Parameters
 ------------
 
+manage_package
+--------------
+Boolean to manage the package resource.
+
+- *Default*: true
+
 package_name
 ------------
 Name of package(s) for facter.
@@ -27,6 +33,12 @@ package_ensure
 String for ensure parameter to facter package. Valid values are 'present' and 'absent'.
 
 - *Default*: present
+
+manage_facts_d_dir
+------------------
+Boolean to manage the directory.
+
+- *Default*: true
 
 facts_d_dir
 -----------
