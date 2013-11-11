@@ -32,6 +32,140 @@ describe 'facter' do
     }
   end
 
+  context 'with default options and stringified \'true\' for manage_package param' do
+    let(:params) { { :manage_package => 'true' } }
+    let(:facts) { { :osfamily => 'RedHat' } }
+
+    it { should include_class('facter') }
+
+    it {
+      should contain_package('facter').with({
+        'ensure' => 'present',
+        'name'   => 'facter',
+      })
+    }
+
+    it {
+      should contain_file('facts_d_directory').with({
+        'ensure' => 'directory',
+        'path'   => '/etc/facter/facts.d',
+        'owner'  => 'root',
+        'group'  => 'root',
+        'mode'   => '0755',
+        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+      })
+    }
+
+    it {
+      should contain_exec('mkdir_p-/etc/facter/facts.d').with({
+        'command' => 'mkdir -p /etc/facter/facts.d',
+        'unless'  => 'test -d /etc/facter/facts.d',
+      })
+    }
+  end
+
+  context 'with default options and stringified \'true\' for manage_facts_d_dir param' do
+    let(:params) { { :manage_facts_d_dir => 'true' } }
+    let(:facts) { { :osfamily => 'RedHat' } }
+
+    it { should include_class('facter') }
+
+    it {
+      should contain_package('facter').with({
+        'ensure' => 'present',
+        'name'   => 'facter',
+      })
+    }
+
+    it {
+      should contain_file('facts_d_directory').with({
+        'ensure' => 'directory',
+        'path'   => '/etc/facter/facts.d',
+        'owner'  => 'root',
+        'group'  => 'root',
+        'mode'   => '0755',
+        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+      })
+    }
+
+    it {
+      should contain_exec('mkdir_p-/etc/facter/facts.d').with({
+        'command' => 'mkdir -p /etc/facter/facts.d',
+        'unless'  => 'test -d /etc/facter/facts.d',
+      })
+    }
+  end
+
+  context 'with default options with manage_package = true and manage_facts_d_dir = false' do
+    let(:params) do
+      { :manage_package     => true,
+        :manage_facts_d_dir => false,
+      }
+    end
+    let(:facts) { { :osfamily => 'RedHat' } }
+
+    it { should include_class('facter') }
+
+    it {
+      should contain_package('facter').with({
+        'ensure' => 'present',
+        'name'   => 'facter',
+      })
+    }
+
+    it { should_not contain_file('facts_d_directory') }
+
+    it { should_not contain_exec('mkdir_p-/etc/facter/facts.d') }
+  end
+
+  context 'with default options with manage_package = false and manage_facts_d_dir = true' do
+    let(:params) do
+      { :manage_package     => false,
+        :manage_facts_d_dir => true,
+      }
+    end
+    let(:facts) { { :osfamily => 'RedHat' } }
+
+    it { should include_class('facter') }
+
+    it { should_not contain_package('facter') }
+
+    it {
+      should contain_file('facts_d_directory').with({
+        'ensure' => 'directory',
+        'path'   => '/etc/facter/facts.d',
+        'owner'  => 'root',
+        'group'  => 'root',
+        'mode'   => '0755',
+        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+      })
+    }
+
+    it {
+      should contain_exec('mkdir_p-/etc/facter/facts.d').with({
+        'command' => 'mkdir -p /etc/facter/facts.d',
+        'unless'  => 'test -d /etc/facter/facts.d',
+      })
+    }
+  end
+
+  context 'with default options with manage_package = false and manage_facts_d_dir = false' do
+    let(:params) do
+      { :manage_package     => false,
+        :manage_facts_d_dir => false,
+      }
+    end
+    let(:facts) { { :osfamily => 'RedHat' } }
+
+    it { should include_class('facter') }
+
+    it { should_not contain_package('facter') }
+
+    it { should_not contain_file('facts_d_directory') }
+
+    it { should_not contain_exec('mkdir_p-/etc/facter/facts.d') }
+  end
+
   context 'with all options specified' do
     let(:facts) { { :osfamily => 'RedHat' } }
     let(:params) do
@@ -102,6 +236,28 @@ describe 'facter' do
       expect {
         should include_class('facter')
       }.to raise_error(Puppet::Error,/facter::facts_d_mode must be a four digit mode. Detected value is <755>./)
+    end
+  end
+
+  context 'with invalid manage_package param' do
+    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:params) { { :manage_package => ['array','is','invalid'] } }
+
+    it do
+      expect {
+        should include_class('facter')
+      }.to raise_error(Puppet::Error)
+    end
+  end
+
+  context 'with invalid manage_facts_d_dir param' do
+    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:params) { { :manage_facts_d_dir => ['array','is','invalid'] } }
+
+    it do
+      expect {
+        should include_class('facter')
+      }.to raise_error(Puppet::Error)
     end
   end
 end
