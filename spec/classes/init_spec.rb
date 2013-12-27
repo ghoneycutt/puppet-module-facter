@@ -1,10 +1,12 @@
 require 'spec_helper'
 describe 'facter' do
 
+  it { should compile.with_all_deps }
+
   context 'with default options' do
     let(:facts) { { :osfamily => 'RedHat' } }
 
-    it { should include_class('facter') }
+    it { should contain_class('facter') }
 
     it {
       should contain_package('facter').with({
@@ -36,7 +38,7 @@ describe 'facter' do
     let(:params) { { :manage_package => 'true' } }
     let(:facts) { { :osfamily => 'RedHat' } }
 
-    it { should include_class('facter') }
+    it { should contain_class('facter') }
 
     it {
       should contain_package('facter').with({
@@ -68,7 +70,7 @@ describe 'facter' do
     let(:params) { { :manage_facts_d_dir => 'true' } }
     let(:facts) { { :osfamily => 'RedHat' } }
 
-    it { should include_class('facter') }
+    it { should contain_class('facter') }
 
     it {
       should contain_package('facter').with({
@@ -104,7 +106,7 @@ describe 'facter' do
     end
     let(:facts) { { :osfamily => 'RedHat' } }
 
-    it { should include_class('facter') }
+    it { should contain_class('facter') }
 
     it {
       should contain_package('facter').with({
@@ -126,7 +128,7 @@ describe 'facter' do
     end
     let(:facts) { { :osfamily => 'RedHat' } }
 
-    it { should include_class('facter') }
+    it { should contain_class('facter') }
 
     it { should_not contain_package('facter') }
 
@@ -157,7 +159,7 @@ describe 'facter' do
     end
     let(:facts) { { :osfamily => 'RedHat' } }
 
-    it { should include_class('facter') }
+    it { should contain_class('facter') }
 
     it { should_not contain_package('facter') }
 
@@ -178,7 +180,7 @@ describe 'facter' do
       }
     end
 
-    it { should include_class('facter') }
+    it { should contain_class('facter') }
 
     it {
       should contain_package('facter').with({
@@ -212,7 +214,7 @@ describe 'facter' do
 
     it do
       expect {
-        should include_class('facter')
+        should contain_class('facter')
       }.to raise_error(Puppet::Error,/facter::package_ensure must be \'present\' or \'absent\'. Detected value is <invalid>./)
     end
   end
@@ -223,7 +225,7 @@ describe 'facter' do
 
     it do
       expect {
-        should include_class('facter')
+        should contain_class('facter')
       }.to raise_error(Puppet::Error)
     end
   end
@@ -234,7 +236,7 @@ describe 'facter' do
 
     it do
       expect {
-        should include_class('facter')
+        should contain_class('facter')
       }.to raise_error(Puppet::Error,/facter::facts_d_mode must be a four digit mode. Detected value is <755>./)
     end
   end
@@ -245,7 +247,7 @@ describe 'facter' do
 
     it do
       expect {
-        should include_class('facter')
+        should contain_class('facter')
       }.to raise_error(Puppet::Error)
     end
   end
@@ -256,7 +258,7 @@ describe 'facter' do
 
     it do
       expect {
-        should include_class('facter')
+        should contain_class('facter')
       }.to raise_error(Puppet::Error)
     end
   end
