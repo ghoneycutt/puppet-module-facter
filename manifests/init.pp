@@ -22,7 +22,7 @@ class facter (
 
   validate_re($facts_d_mode,
     '^\d{4}$',
-    "facter::facts_d_mode must be a four digit mode. Detected value is <755>."
+    "facter::facts_d_mode must be a four digit mode. Detected value is <${facts_d_mode}>."
   )
 
   if type($manage_package) == 'string' {
