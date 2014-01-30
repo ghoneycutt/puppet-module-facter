@@ -183,9 +183,8 @@ describe 'facter' do
     it { should contain_class('facter') }
 
     it {
-      should contain_package('facter').with({
+      should contain_package('myfacter').with({
         'ensure' => 'absent',
-        'name'   => 'myfacter',
       })
     }
 
@@ -206,6 +205,47 @@ describe 'facter' do
         'unless'  => 'test -d /etc/puppet/facter/facts.d',
       })
     }
+  end
+
+  describe 'with package_name set to' do
+    context 'a string' do
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :package_name => 'myfacter' } }
+
+      it {
+        should contain_package('myfacter').with({
+          'ensure' => 'present',
+        })
+      }
+    end
+
+    context 'an array' do
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :package_name => ['facter','facterfoo'] } }
+
+      it {
+        should contain_package('facter').with({
+          'ensure' => 'present',
+        })
+      }
+
+      it {
+        should contain_package('facterfoo').with({
+          'ensure' => 'present',
+        })
+      }
+    end
+
+    context 'an invalid type (boolean)' do
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :package_name => true } }
+
+      it do
+        expect {
+          should contain_class('facter')
+        }.to raise_error(Puppet::Error,/facter::package_name must be a string or an array./)
+      end
+    end
   end
 
   context 'with invalid package_ensure param' do

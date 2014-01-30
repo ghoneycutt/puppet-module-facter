@@ -9,7 +9,7 @@ Puppet module to manage Facter
 
 # Compatibility
 ---------------
-This module is built for use with Puppet v3
+This module is built for use with Puppet v3 and supports Ruby v1.8.7, v1.9.3, and v2.0.0
 
 ===
 
@@ -24,9 +24,9 @@ Boolean to manage the package resource.
 
 package_name
 ------------
-Name of package(s) for facter.
+String or Array of package(s) for facter.
 
-- *Default*: facter
+- *Default*: 'facter'
 
 package_ensure
 --------------
