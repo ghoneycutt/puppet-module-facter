@@ -39,11 +39,14 @@ class facter (
     $manage_facts_d_dir_real = $manage_facts_d_dir
   }
 
+  if type($package_name) != 'String' and type($package_name) != 'Array' {
+    fail('facter::package_name must be a string or an array.')
+  }
+
   if $manage_package_real == true {
 
-    package { 'facter':
+    package { $package_name:
       ensure => $package_ensure,
-      name   => $package_name,
     }
   }
 
