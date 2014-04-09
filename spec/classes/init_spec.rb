@@ -168,15 +168,121 @@ describe 'facter' do
     it { should_not contain_exec('mkdir_p-/etc/facter/facts.d') }
   end
 
+  context 'with facts specified as a hash on RedHat' do
+    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:params) do
+      {
+        :facts => {
+          'fact1' => {
+            'value' => 'fact1value',
+          },
+          'fact2' => {
+            'value' => 'fact2value',
+            'match' => 'fact2match',
+          },
+        }
+      }
+    end
+
+    it { should contain_file('facts_file').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/facter/facts.d/facts.txt',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[facts_d_directory]',
+      })
+    }
+
+    it { should contain_class('Facter::Fact[fact1]')}
+    it { should contain_class('Facter::Fact[fact2]')}
+    it { should contain_class('facter') }
+    it { should contain_package('facter') }
+    it { should contain_file('facts_d_directory') }
+    it { should contain_exec('mkdir_p-/etc/facter/facts.d') }
+  end
+
+  context 'with facts specified as a hash with different file and folder on RedHat' do
+    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:params) do
+      {
+        :facts_file => "file.txt",
+        :facts => {
+          'fact1' => {
+            'value' => 'fact1value',
+          },
+          'fact2' => {
+            'value' => 'fact2value',
+            'file'  => 'file2.txt',
+          },
+          'fact3' => {
+            'value'     => 'fact3value',
+            'match'     => 'fact3match',
+            'file'      => 'file3.txt',
+            'facts_dir' => '/etc/facts3',
+          },
+        }
+      }
+    end
+
+    it { should contain_file('facts_file').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/facter/facts.d/file.txt',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[facts_d_directory]',
+      })
+    }
+
+    it { should contain_file('facts_file_fact2').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/facter/facts.d/file2.txt',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[facts_d_directory]',
+      })
+    }
+
+    it { should contain_file('facts_file_fact3').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/facts3/file3.txt',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[facts_d_directory]',
+      })
+    }
+
+    it { should contain_class('Facter::Fact[fact1]')}
+    it { should contain_class('Facter::Fact[fact2]')}
+    it { should contain_class('Facter::Fact[fact3]')}
+    it { should contain_class('facter') }
+    it { should contain_package('facter') }
+    it { should contain_file('facts_d_directory') }
+    it { should contain_exec('mkdir_p-/etc/facter/facts.d') }
+  end
+
   context 'with all options specified' do
     let(:facts) { { :osfamily => 'RedHat' } }
     let(:params) do
-      { :package_name   => 'myfacter',
-        :package_ensure => 'absent',
-        :facts_d_dir    => '/etc/puppet/facter/facts.d',
-        :facts_d_owner  => 'puppet',
-        :facts_d_group  => 'puppet',
-        :facts_d_mode   => '0775',
+      { :package_name     => 'myfacter',
+        :package_ensure   => 'absent',
+        :facts_d_dir      => '/etc/puppet/facter/facts.d',
+        :facts_d_owner    => 'puppet',
+        :facts_d_group    => 'puppet',
+        :facts_d_mode     => '0775',
+        :facts_file       => 'file.txt',
+        :facts_file_owner => 'puppet',
+        :facts_file_group => 'puppet',
+        :facts_file_mode  => '0775',
+        :facts => {
+          'fact' => {
+            'value' => 'value',
+            'match' => 'match',
+          },
+        }
       }
     end
 
@@ -205,6 +311,18 @@ describe 'facter' do
         'unless'  => 'test -d /etc/puppet/facter/facts.d',
       })
     }
+
+    it { should contain_file('facts_file').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/puppet/facter/facts.d/file.txt',
+        'owner'   => 'puppet',
+        'group'   => 'puppet',
+        'mode'    => '0775',
+        'require' => 'File[facts_d_directory]',
+      })
+    }
+
+    it { should contain_class('Facter::Fact[fact]')}
   end
 
   describe 'with package_name set to' do
@@ -391,4 +509,27 @@ describe 'facter' do
       end
     end
   end
+
+  context 'with invalid facts param' do
+    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:params) { { :facts => ['array','is','invalid'] } }
+
+    it do
+      expect {
+        should contain_class('facter')
+      }.to raise_error(Puppet::Error)
+    end
+  end
+
+  context 'with invalid fact_file param' do
+    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:params) { { :fact_file => ['array','is','invalid'] } }
+
+    it do
+      expect {
+        should contain_class('facter')
+      }.to raise_error(Puppet::Error)
+    end
+  end
+
 end
