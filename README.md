@@ -63,3 +63,21 @@ facts_d_mode
 Four digit mode of facts.d directory.
 
 - *Default*: 0755
+
+path_to_facter
+-------------
+Path to facter to create symlink from.  Required if ensure_facter_symlink is true.
+
+- *Default*: '/usr/bin/facter'
+
+path_to_facter_symlink
+----------------------------
+Path to symlink for facter.  Required if ensure_facter_symlink is true.
+
+- *Default*: '/usr/local/bin/facter'
+
+ensure_facter_symlink
+---------------------
+Boolean for ensuring a symlink for path_to_facter to symlink_facter_target. This is useful if you install facter in a non-standard location that is not in your $PATH.
+
+- *Default*: false
