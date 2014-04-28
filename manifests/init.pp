@@ -11,6 +11,9 @@ class facter (
   $facts_d_owner      = 'root',
   $facts_d_group      = 'root',
   $facts_d_mode       = '0755',
+  $path_to_facter     = '/usr/bin/facter',
+  $path_to_facter_symlink = '/usr/local/bin/facter',
+  $ensure_facter_symlink = false,
 ) {
 
   validate_re($package_ensure,
@@ -61,6 +64,27 @@ class facter (
       group   => $facts_d_group,
       mode    => $facts_d_mode,
       require => Common::Mkdir_p[$facts_d_dir],
+    }
+  }
+
+  if type($ensure_facter_symlink) == 'string' {
+    $ensure_facter_symlink_bool = str2bool($ensure_facter_symlink)
+  } else {
+    $ensure_facter_symlink_bool = $ensure_facter_symlink
+  }
+  validate_bool($ensure_facter_symlink_bool)
+
+  # optionally create symlinks to facter binary
+  if $ensure_facter_symlink_bool == true {
+
+    # validate params
+    validate_absolute_path($path_to_facter_symlink)
+    validate_absolute_path($path_to_facter)
+
+    file { 'facter_symlink':
+      ensure => 'link',
+      path   => $path_to_facter_symlink,
+      target => $path_to_facter,
     }
   }
 }
