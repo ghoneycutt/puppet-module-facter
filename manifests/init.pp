@@ -28,6 +28,10 @@ class facter (
     "facter::facts_d_mode must be a four digit mode. Detected value is <${facts_d_mode}>."
   )
 
+  # validate params
+  validate_absolute_path($path_to_facter_symlink)
+  validate_absolute_path($path_to_facter)
+
   if type($manage_package) == 'string' {
     $manage_package_real = str2bool($manage_package)
   } else {
@@ -76,10 +80,6 @@ class facter (
 
   # optionally create symlinks to facter binary
   if $ensure_facter_symlink_bool == true {
-
-    # validate params
-    validate_absolute_path($path_to_facter_symlink)
-    validate_absolute_path($path_to_facter)
 
     file { 'facter_symlink':
       ensure => 'link',
