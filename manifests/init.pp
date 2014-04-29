@@ -3,17 +3,17 @@
 # Manage facter
 #
 class facter (
-  $manage_package     = true,
-  $package_name       = 'facter',
-  $package_ensure     = 'present',
-  $manage_facts_d_dir = true,
-  $facts_d_dir        = '/etc/facter/facts.d',
-  $facts_d_owner      = 'root',
-  $facts_d_group      = 'root',
-  $facts_d_mode       = '0755',
-  $path_to_facter     = '/usr/bin/facter',
+  $manage_package         = true,
+  $package_name           = 'facter',
+  $package_ensure         = 'present',
+  $manage_facts_d_dir     = true,
+  $facts_d_dir            = '/etc/facter/facts.d',
+  $facts_d_owner          = 'root',
+  $facts_d_group          = 'root',
+  $facts_d_mode           = '0755',
+  $path_to_facter         = '/usr/bin/facter',
   $path_to_facter_symlink = '/usr/local/bin/facter',
-  $ensure_facter_symlink = false,
+  $ensure_facter_symlink  = false,
 ) {
 
   validate_re($package_ensure,

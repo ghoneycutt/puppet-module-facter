@@ -345,23 +345,34 @@ describe 'facter' do
         })
       }
     end
+  end
 
-    context 'enabled with invalid path_to_facter' do
-      let(:params) { { :ensure_facter_symlink  => true,
-                       :path_to_facter         => 'true',
-                       :path_to_facter_symlink => '/bar' } }
+  describe 'with invalid path for' do
+    context 'path_to_facter' do
+      let(:params) do
+        {
+          :path_to_facter => 'invalid/path',
+        }
+      end
+
       it do
-        expect { should }.to raise_error(Puppet::Error)
+        expect {
+          should contain_class('facter')
+        }.to raise_error(Puppet::Error)
       end
     end
 
-    context 'enabled with invalid path_to_facter_symlink' do
-      let(:params) { {
-                      :ensure_facter_symlink  => true,
-                      :path_to_facter         => '/foo/bar',
-                      :path_to_facter_symlink => 'undef' } }
+    context 'path_to_facter_symlink' do
+      let(:params) do
+        {
+          :path_to_facter_symlink => 'invalid/path',
+        }
+      end
+
       it do
-        expect { should }.to raise_error(Puppet::Error)
+        expect {
+          should contain_class('facter')
+        }.to raise_error(Puppet::Error)
       end
     end
   end
