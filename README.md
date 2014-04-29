@@ -9,7 +9,7 @@ Puppet module to manage Facter
 
 # Compatibility
 ---------------
-This module is built for use with Puppet v3 and supports Ruby v1.8.7, v1.9.3, and v2.0.0
+This module is built for use with Puppet v3 and supports Ruby v1.8.7, v1.9.3, v2.0.0 and v2.1.0.
 
 ===
 
