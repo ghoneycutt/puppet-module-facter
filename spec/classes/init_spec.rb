@@ -302,4 +302,78 @@ describe 'facter' do
       }.to raise_error(Puppet::Error)
     end
   end
+
+  describe 'with ensure_facter_symlink' do
+    ['true',true].each do |value|
+      context "set to #{value} (default)" do
+        let(:facts) { { :osfamily => 'Debian' } }
+        let(:params) { { :ensure_facter_symlink => value } }
+
+        it {
+          should contain_file('facter_symlink').with({
+            'ensure'  => 'link',
+            'path'    => '/usr/local/bin/facter',
+            'target'  => '/usr/bin/facter',
+          })
+        }
+      end
+    end
+
+    ['false',false].each do |value|
+      context "set to #{value} (default)" do
+        let(:facts) { { :osfamily => 'Debian' } }
+        let(:params) { { :ensure_facter_symlink => value } }
+
+        it { should_not contain_file('facter_symlink') }
+      end
+    end
+
+    context 'enabled with all params specified' do
+      let(:facts) { { :osfamily => 'Debian' } }
+      let(:params) do
+        { :ensure_facter_symlink  => true,
+          :path_to_facter         => '/foo/bar',
+          :path_to_facter_symlink => '/bar',
+        }
+      end
+
+      it {
+        should contain_file('facter_symlink').with({
+          'ensure'  => 'link',
+          'path'    => '/bar',
+          'target'  => '/foo/bar',
+        })
+      }
+    end
+  end
+
+  describe 'with invalid path for' do
+    context 'path_to_facter' do
+      let(:params) do
+        {
+          :path_to_facter => 'invalid/path',
+        }
+      end
+
+      it do
+        expect {
+          should contain_class('facter')
+        }.to raise_error(Puppet::Error)
+      end
+    end
+
+    context 'path_to_facter_symlink' do
+      let(:params) do
+        {
+          :path_to_facter_symlink => 'invalid/path',
+        }
+      end
+
+      it do
+        expect {
+          should contain_class('facter')
+        }.to raise_error(Puppet::Error)
+      end
+    end
+  end
 end
