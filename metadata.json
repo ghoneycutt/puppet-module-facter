@@ -1,0 +1,79 @@
+{
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "3.2.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "AIX"
+    },
+    {
+      "operatingsystem": "Debian"
+    },
+    {
+      "operatingsystem": "RedHat"
+    },
+    {
+      "operatingsystem": "CentOS"
+    },
+    {
+      "operatingsystem": "OracleLinux"
+    },
+    {
+      "operatingsystem": "Scientific"
+    },
+    {
+      "operatingsystem": "Solaris"
+    },
+    {
+      "operatingsystem": "SLES"
+    },
+    {
+      "operatingsystem": "SLED"
+    },
+    {
+      "operatingsystem": "Windows"
+    },
+    {
+      "operatingsystem": "Ubuntu"
+    }
+  ],
+  "name": "ghoneycutt-facter",
+  "version": "1.2.0",
+  "source": "git://github.com/ghoneycutt/puppet-module-facter.git",
+  "author": "ghoneycutt",
+  "license": "Apache License, Version 2.0",
+  "summary": "Manage Facter",
+  "description": "Manage Facter and optionally ensure facts.d directory.",
+  "project_page": "https://github.com/ghoneycutt/puppet-module-facter",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 3.2.0"
+    },
+    {
+      "name": "ghoneycutt/common",
+      "version_requirement": ">= 1.0.0"
+    }
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "Gemfile": "2a0d61abd5e19e11c51592e53c5fecff",
+    "LICENSE": "7adbf0cac6bb2f12810260eabee41039",
+    "Modulefile": "929de5bd058a5214da6ba2b5044a2669",
+    "README.md": "36047710946b3edd4b7e5fbd88fc9ae2",
+    "Rakefile": "8ff6a0f7db638421d1742c5d365d0266",
+    "manifests/init.pp": "129a2fb362d89b6be31936836d515fa4",
+    "spec/classes/init_spec.rb": "17e20f5d68eac014d8660f1504267c0c",
+    "spec/spec_helper.rb": "3ea886dd135e120afa31e0aab12e85b0",
+    "tests/init.pp": "e3092aa1e9de2ce7bc85413d539bd143"
+  }
+}
