@@ -30,7 +30,7 @@ String or Array of package(s) for facter.
 
 package_ensure
 --------------
-String for ensure parameter to facter package. Valid values are 'present' and 'absent'.
+String for ensure parameter to facter package.
 
 - *Default*: present
 

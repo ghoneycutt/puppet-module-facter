@@ -250,12 +250,12 @@ describe 'facter' do
 
   context 'with invalid package_ensure param' do
     let(:facts) { { :osfamily => 'RedHat' } }
-    let(:params) { { :package_ensure => 'invalid' } }
+    let(:params) { { :package_ensure => ['present'] } }
 
     it do
       expect {
         should contain_class('facter')
-      }.to raise_error(Puppet::Error,/facter::package_ensure must be \'present\' or \'absent\'. Detected value is <invalid>./)
+      }.to raise_error(Puppet::Error)
     end
   end
 
