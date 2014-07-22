@@ -60,6 +60,10 @@
     {
       "name": "ghoneycutt/common",
       "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "stahnma/puppetlabs_yum",
+      "version_requirement": ">= 0.1.0"
     }
   ],
   "types": [

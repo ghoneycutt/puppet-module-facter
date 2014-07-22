@@ -6,5 +6,8 @@ fixtures:
     'common':
       repo: 'git://github.com/ghoneycutt/puppet-module-common.git'
       ref: 'v1.0.2'
+    'puppetlabs_yum':
+      repo: 'git://github.com/stahnma/puppet-module-puppetlabs_yum.git'
+      ref: '0.0.14'
   symlinks:
     facter: "#{source_dir}"
