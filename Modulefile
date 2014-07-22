@@ -9,3 +9,4 @@ project_page 'https://github.com/ghoneycutt/puppet-module-facter'
 
 dependency 'puppetlabs/stdlib', '>= 3.2.0'
 dependency 'ghoneycutt/common', '>= 1.0.0'
+dependency 'stahnma/puppetlabs_yum', '>= 0.1.0'

@@ -7,9 +7,10 @@ describe 'facter' do
     let(:facts) { { :osfamily => 'RedHat' } }
 
     it { should contain_class('facter') }
+    it { should_not contain_class('puppetlabs_yum') }
 
     it {
-      should contain_package('facter').with({
+      should contain_package('facter').only_with({
         'ensure' => 'present',
         'name'   => 'facter',
       })
@@ -30,6 +31,50 @@ describe 'facter' do
       should contain_exec('mkdir_p-/etc/facter/facts.d').with({
         'command' => 'mkdir -p /etc/facter/facts.d',
         'unless'  => 'test -d /etc/facter/facts.d',
+      })
+    }
+  end
+
+  context 'when manage_puppetlabs_repo => true' do
+    let(:params) { { :manage_puppetlabs_repo => true } }
+    let(:facts) { { :osfamily => 'RedHat' } }
+
+    it { should contain_class('puppetlabs_yum') }
+
+    it {
+      should contain_package('facter').only_with({
+        'ensure'  => 'present',
+        'name'    => 'facter',
+        'require' => 'Yumrepo[puppetlabs-products]',
+      })
+    }
+
+    context 'when osfamily => \'Debian\'' do
+      let(:params) { { :manage_puppetlabs_repo => true } }
+      let(:facts) { { :osfamily => 'Debian' } }
+
+      it { should_not contain_class('puppetlabs_yum') }
+
+      it {
+        should contain_package('facter').only_with({
+          'ensure'  => 'present',
+          'name'    => 'facter',
+        })
+      }
+    end
+  end
+
+  context 'when manage_puppetlabs_repo => \'true\'' do
+    let(:params) { { :manage_puppetlabs_repo => 'true' } }
+    let(:facts) { { :osfamily => 'RedHat' } }
+
+    it { should contain_class('puppetlabs_yum') }
+
+    it {
+      should contain_package('facter').only_with({
+        'ensure'  => 'present',
+        'name'    => 'facter',
+        'require' => 'Yumrepo[puppetlabs-products]',
       })
     }
   end
@@ -255,7 +300,7 @@ describe 'facter' do
     it do
       expect {
         should contain_class('facter')
-      }.to raise_error(Puppet::Error,/facter::package_ensure must be \'present\' or \'absent\'. Detected value is <invalid>./)
+      }.not_to raise_error
     end
   end
 
@@ -280,6 +325,18 @@ describe 'facter' do
       }.to raise_error(Puppet::Error,/facter::facts_d_mode must be a four digit mode. Detected value is <751>./)
     end
   end
+
+  context 'with invalid manage_puppetlabs_repo param' do
+    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:params) { { :manage_puppetlabs_repo => ['array','is','invalid'] } }
+
+    it do
+      expect {
+        should contain_class('facter')
+      }.to raise_error(Puppet::Error)
+    end
+  end
+
 
   context 'with invalid manage_package param' do
     let(:facts) { { :osfamily => 'RedHat' } }

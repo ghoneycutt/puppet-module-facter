@@ -16,6 +16,12 @@ This module is built for use with Puppet v3 and supports Ruby v1.8.7, v1.9.3, v2
 # Parameters
 ------------
 
+manage\_puppetlabs\_repo
+--------------
+Boolean to manage the Puppetlabs repo.  This only effects RedHat based systems.
+
+- *Default*: false
+
 manage_package
 --------------
 Boolean to manage the package resource.
@@ -30,7 +36,7 @@ String or Array of package(s) for facter.
 
 package_ensure
 --------------
-String for ensure parameter to facter package. Valid values are 'present' and 'absent'.
+String for ensure parameter to facter package.
 
 - *Default*: present
 

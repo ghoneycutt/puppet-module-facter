@@ -3,6 +3,7 @@
 # Manage facter
 #
 class facter (
+  $manage_puppetlabs_repo = false,
   $manage_package         = true,
   $package_name           = 'facter',
   $package_ensure         = 'present',
@@ -16,10 +17,12 @@ class facter (
   $ensure_facter_symlink  = false,
 ) {
 
-  validate_re($package_ensure,
-    '^(present)|(absent)$',
-    "facter::package_ensure must be \'present\' or \'absent\'. Detected value is <${package_ensure}>."
-  )
+  if type($manage_puppetlabs_repo) == 'string' {
+    $manage_puppetlabs_repo_real = str2bool($manage_puppetlabs_repo)
+  } else {
+    validate_bool($manage_puppetlabs_repo)
+    $manage_puppetlabs_repo_real = $manage_puppetlabs_repo
+  }
 
   validate_absolute_path($facts_d_dir)
 
@@ -50,10 +53,25 @@ class facter (
     fail('facter::package_name must be a string or an array.')
   }
 
+  if $manage_puppetlabs_repo_real == true {
+    case $::osfamily {
+      'RedHat': {
+        include puppetlabs_yum
+        $package_require  = Yumrepo['puppetlabs-products']
+      }
+      default: {
+        $package_require  = undef
+      }
+    }
+  } else {
+    $package_require  = undef
+  }
+
   if $manage_package_real == true {
 
     package { $package_name:
-      ensure => $package_ensure,
+      ensure  => $package_ensure,
+      require => $package_require,
     }
   }
 
