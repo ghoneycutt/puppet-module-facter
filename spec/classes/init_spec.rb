@@ -248,14 +248,29 @@ describe 'facter' do
     end
   end
 
-  context 'with invalid package_ensure param' do
-    let(:facts) { { :osfamily => 'RedHat' } }
-    let(:params) { { :package_ensure => 'invalid' } }
+  describe 'with package_ensure parameter' do
+    ['present','absent','23'].each do |value|
+      context "set to a valid string value of #{value}" do
+        let(:facts) { { :osfamily => 'RedHat' } }
+        let(:params) { { :package_ensure => value } }
 
-    it do
-      expect {
-        should contain_class('facter')
-      }.to raise_error(Puppet::Error,/facter::package_ensure must be \'present\' or \'absent\'. Detected value is <invalid>./)
+        it {
+          should contain_package('facter').with({
+            'ensure' => value,
+          })
+        }
+      end
+    end
+
+    context 'set to a non-string value' do
+      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:params) { { :package_ensure => ['invalid'] } }
+
+      it do
+        expect {
+          should contain_class('facter')
+        }.to raise_error(Puppet::Error)
+      end
     end
   end
 

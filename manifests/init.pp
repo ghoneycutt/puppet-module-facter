@@ -16,10 +16,7 @@ class facter (
   $ensure_facter_symlink  = false,
 ) {
 
-  validate_re($package_ensure,
-    '^(present)|(absent)$',
-    "facter::package_ensure must be \'present\' or \'absent\'. Detected value is <${package_ensure}>."
-  )
+  validate_string($package_ensure)
 
   validate_absolute_path($facts_d_dir)
 
