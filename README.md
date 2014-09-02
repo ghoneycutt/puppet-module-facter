@@ -65,13 +65,13 @@ Four digit mode of facts.d directory.
 - *Default*: 0755
 
 path_to_facter
--------------
+--------------
 Path to facter to create symlink from.  Required if ensure_facter_symlink is true.
 
 - *Default*: '/usr/bin/facter'
 
 path_to_facter_symlink
-----------------------------
+----------------------
 Path to symlink for facter.  Required if ensure_facter_symlink is true.
 
 - *Default*: '/usr/local/bin/facter'
@@ -81,3 +81,77 @@ ensure_facter_symlink
 Boolean for ensuring a symlink for path_to_facter to symlink_facter_target. This is useful if you install facter in a non-standard location that is not in your $PATH.
 
 - *Default*: false
+
+facts
+-----
+Hash of facts to be passed to facter:fact with create_resources().
+
+- *Default*: undef
+
+facts_file
+----------
+Filename under facts_d_dir to place facts in
+
+- *Default*: facts.txt
+
+facts_file_owner
+----------------
+Owner of facts_file file.
+
+- *Default*: root
+
+facts_d_group
+-------------
+Group of facst_file file.
+
+- *Default*: root
+
+facts_d_mode
+------------
+Four digit mode of facts_file file.
+
+- *Default*: 0644
+
+===
+
+# Define `facter::fact`
+
+Ensures a fact is present in the fact file with stdlib file_line with fact=value format.
+
+## Usage
+You can optionally specify a hash of facter facts in Hiera
+<pre>
+---
+facter::facts:
+  puppetmaster:
+    value: "hostname.localdomain"
+</pre>
+
+file
+----
+Filename under facts_d_dir to place facts in
+
+- *Default*: $facts_file
+
+facts_dir
+---------
+Path to facts.d directory.
+
+- *Default*: $facts_d_dir
+
+fact
+----
+Name of the fact
+
+- *Default*: $name
+
+value
+-----
+Value for the fact
+
+match
+-----
+String to match to replace existing line.
+Default value matches fact= on a single new line without whitespaces after equal sign.
+
+- *Default*: ^$name=\S*$
