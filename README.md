@@ -84,31 +84,31 @@ Boolean for ensuring a symlink for path_to_facter to symlink_facter_target. This
 
 facts
 -----
-Hash of facts to be passed to facter:fact with create_resources().
+Hash of facts to be passed to facter::fact with create_resources().
 
 - *Default*: undef
 
 facts_file
 ----------
-Filename under facts_d_dir to place facts in
+Filename under `facts_d_dir` to place facts in
 
 - *Default*: facts.txt
 
 facts_file_owner
 ----------------
-Owner of facts_file file.
+Owner of facts_file.
 
 - *Default*: root
 
 facts_d_group
 -------------
-Group of facst_file file.
+Group of facst_file.
 
 - *Default*: root
 
 facts_d_mode
 ------------
-Four digit mode of facts_file file.
+Four digit mode of facts_file.
 
 - *Default*: 0644
 
@@ -116,28 +116,35 @@ Four digit mode of facts_file file.
 
 # Define `facter::fact`
 
-Ensures a fact is present in the fact file with stdlib file_line with fact=value format.
+Ensures a fact is present in the fact file with stdlib file_line() in fact=value format.
 
 ## Usage
-You can optionally specify a hash of facter facts in Hiera
+You can optionally specify a hash of external facts in Hiera.
 <pre>
 ---
 facter::facts:
-  puppetmaster:
-    value: "hostname.localdomain"
+  role:
+    value: 'puppetmaster'
+  location:
+    value: 'RNB'
+    file: 'location.txt'
 </pre>
 
-file
-----
-Filename under facts_d_dir to place facts in
+The above configuration in Hiera would produce `/etc/facter/facts.d/facts.txt` with the following content.
+<pre>
+role=puppetmaster
+</pre>
 
-- *Default*: $facts_file
+It would also produce `/etc/facter/facts.d/location.txt` with the following content.
+<pre>
+location=RNB
+</pre>
 
-facts_dir
----------
-Path to facts.d directory.
+value
+-----
+Value for the fact
 
-- *Default*: $facts_d_dir
+- *Required*
 
 fact
 ----
@@ -145,13 +152,14 @@ Name of the fact
 
 - *Default*: $name
 
-value
------
-Value for the fact
+file
+----
+File under `facts_dir` in which to place the fact.
 
-match
------
-String to match to replace existing line.
-Default value matches fact= on a single new line without whitespaces after equal sign.
+- *Default*: 'facts.txt'
 
-- *Default*: ^$name=\S*$
+facts_dir
+---------
+Path to facts.d directory.
+
+- *Default*: '/etc/facter/facts.d'

@@ -1,15 +1,17 @@
 # Class facter::fact
 #
-# Manage file based customized fact
+# Manage txt based external facts.
 #
-
 define facter::fact (
-  $file       = $facter::facts_file,
-  $facts_dir  = $facter::facts_d_dir,
-  $fact       = $name,
-  $value      = undef,
-  $match      = "^${name}=\\S*$",
+  $value,
+  $fact      = $name,
+  $file      = 'facts.txt',
+  $facts_dir = '/etc/facter/facts.d',
 ) {
+
+  require 'facter'
+
+  $match = "^${name}=\\S*$"
 
   if $file != $facter::facts_file {
     file { "facts_file_${name}":
@@ -28,4 +30,3 @@ define facter::fact (
     match => $match,
   }
 }
-

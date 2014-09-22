@@ -178,7 +178,6 @@ describe 'facter' do
           },
           'fact2' => {
             'value' => 'fact2value',
-            'match' => 'fact2match',
           },
         }
       }
@@ -194,10 +193,18 @@ describe 'facter' do
       })
     }
 
-    it { should contain_class('Facter::Fact[fact1]')}
-    it { should contain_class('Facter::Fact[fact2]')}
-    it { should contain_class('facter') }
-    it { should contain_package('facter') }
+    it {
+      should contain_file_line('fact_line_fact1').with({
+        'line' => 'fact1=fact1value',
+      })
+    }
+
+    it {
+      should contain_file_line('fact_line_fact2').with({
+        'line' => 'fact2=fact2value',
+      })
+    }
+
     it { should contain_file('facts_d_directory') }
     it { should contain_exec('mkdir_p-/etc/facter/facts.d') }
   end
@@ -217,7 +224,6 @@ describe 'facter' do
           },
           'fact3' => {
             'value'     => 'fact3value',
-            'match'     => 'fact3match',
             'file'      => 'file3.txt',
             'facts_dir' => '/etc/facts3',
           },
@@ -255,11 +261,24 @@ describe 'facter' do
       })
     }
 
-    it { should contain_class('Facter::Fact[fact1]')}
-    it { should contain_class('Facter::Fact[fact2]')}
-    it { should contain_class('Facter::Fact[fact3]')}
-    it { should contain_class('facter') }
-    it { should contain_package('facter') }
+    it {
+      should contain_file_line('fact_line_fact1').with({
+        'line' => 'fact1=fact1value',
+      })
+    }
+
+    it {
+      should contain_file_line('fact_line_fact2').with({
+        'line' => 'fact2=fact2value',
+      })
+    }
+
+    it {
+      should contain_file_line('fact_line_fact3').with({
+        'line' => 'fact3=fact3value',
+      })
+    }
+
     it { should contain_file('facts_d_directory') }
     it { should contain_exec('mkdir_p-/etc/facter/facts.d') }
   end
@@ -280,7 +299,6 @@ describe 'facter' do
         :facts => {
           'fact' => {
             'value' => 'value',
-            'match' => 'match',
           },
         }
       }
@@ -322,7 +340,11 @@ describe 'facter' do
       })
     }
 
-    it { should contain_class('Facter::Fact[fact]')}
+    it {
+      should contain_file_line('fact_line_fact').with({
+        'line' => 'fact=value',
+      })
+    }
   end
 
   describe 'with package_name set to' do

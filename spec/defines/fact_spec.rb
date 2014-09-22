@@ -7,35 +7,30 @@ describe 'facter::fact' do
       {
         :fact => 'fact1',
         :value => 'fact1value',
-        :match => '^fact1=\S*$',
-        :file => 'facts.txt',
-        :facts_dir => "/factsdir",
+        :file => 'custom.txt',
+        :facts_dir => '/factsdir',
       }
     end
 
     it {
-      should contain_file("facts_file_fact1").with({
+      should contain_file('facts_file_fact1').with({
         'ensure'  => 'file',
-        'path'    => '/factsdir/facts.txt',
+        'path'    => '/factsdir/custom.txt',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
         'require' => 'File[facts_d_directory]',
       })
     }
 
     it {
-      should contain_file_line("fact_line_fact1").with({
+      should contain_file_line('fact_line_fact1').with({
         'name' => 'fact_line_fact1',
-        'path' => '/factsdir/facts.txt',
+        'path' => '/factsdir/custom.txt',
         'line' => 'fact1=fact1value',
         'match' => '^fact1=\S*$',
       })
     }
-
-    it { should contain_class('Facter::Fact[fact1]')}
-
-    it { should have_file_resource_count(1) }
-
-    it { should have_file_line_resource_count(1) }
-
   end
 
   context 'with fact specified ' do
@@ -47,21 +42,16 @@ describe 'facter::fact' do
       }
     end
 
-    it {
-      should contain_file_line("fact_line_fact2").with({
-        'name' => 'fact_line_fact2',
-        'line' => 'fact2=fact2value',
-      })
-    }
-
-    it { should contain_class('Facter::Fact[fact2]')}
-
+    # Does not contain this file, because we are using the default which is
+    # managed in the facter class.
     it { should_not contain_file('facts_file_fact2') }
 
-    it { should have_file_resource_count(0) }
-
-    it { should have_file_line_resource_count(1) }
-
+    it {
+      should contain_file_line('fact_line_fact2').with({
+        'name' => 'fact_line_fact2',
+        'line' => 'fact2=fact2value',
+        'path' => '/etc/facter/facts.d/facts.txt',
+      })
+    }
   end
-
 end
