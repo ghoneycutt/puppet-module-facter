@@ -14,6 +14,11 @@ class facter (
   $path_to_facter         = '/usr/bin/facter',
   $path_to_facter_symlink = '/usr/local/bin/facter',
   $ensure_facter_symlink  = false,
+  $facts                  = undef,
+  $facts_file             = 'facts.txt',
+  $facts_file_owner       = 'root',
+  $facts_file_group       = 'root',
+  $facts_file_mode        = '0644',
 ) {
 
   validate_string($package_ensure)
@@ -83,5 +88,20 @@ class facter (
       path   => $path_to_facter_symlink,
       target => $path_to_facter,
     }
+  }
+
+  # optionally push fact to client
+  if $facts != undef {
+    validate_hash($facts)
+    validate_absolute_path("${facts_d_dir}/${facts_file}")
+    file { 'facts_file':
+      ensure  => file,
+      path    => "${facts_d_dir}/${facts_file}",
+      owner   => $facts_file_owner,
+      group   => $facts_file_group,
+      mode    => $facts_file_mode,
+      require => File['facts_d_directory'],
+    }
+    create_resources('facter::fact',$facts)
   }
 }
