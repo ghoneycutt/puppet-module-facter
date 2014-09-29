@@ -102,6 +102,10 @@ class facter (
       mode    => $facts_file_mode,
       require => File['facts_d_directory'],
     }
-    create_resources('facter::fact',$facts)
+    $facts_defaults = {
+      'file'      => $facts_file,
+      'facts_dir' => $facts_d_dir,
+    }
+    create_resources('facter::fact',$facts, $facts_defaults)
   }
 }
