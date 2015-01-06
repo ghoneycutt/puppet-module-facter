@@ -1,9 +1,9 @@
 {
   "name": "ghoneycutt-facter",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "author": "ghoneycutt",
   "summary": "Manage Facter",
-  "license": "Apache License, Version 2.0",
+  "license": "Apache-2.0",
   "source": "git://github.com/ghoneycutt/puppet-module-facter.git",
   "project_page": "https://github.com/ghoneycutt/puppet-module-facter",
   "issues_url": "https://github.com/ghoneycutt/puppet-module-facter/issues",
