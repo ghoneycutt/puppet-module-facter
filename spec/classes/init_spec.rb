@@ -11,7 +11,7 @@ describe 'facter' do
     it {
       should contain_package('facter').with({
         'ensure' => 'present',
-        'name'   => 'facter',
+        'name'   => 'facter'
       })
     }
 
@@ -22,14 +22,14 @@ describe 'facter' do
         'owner'  => 'root',
         'group'  => 'root',
         'mode'   => '0755',
-        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/facter/facts.d]'
       })
     }
 
     it {
       should contain_exec('mkdir_p-/etc/facter/facts.d').with({
         'command' => 'mkdir -p /etc/facter/facts.d',
-        'unless'  => 'test -d /etc/facter/facts.d',
+        'unless'  => 'test -d /etc/facter/facts.d'
       })
     }
   end
@@ -43,7 +43,7 @@ describe 'facter' do
     it {
       should contain_package('facter').with({
         'ensure' => 'present',
-        'name'   => 'facter',
+        'name'   => 'facter'
       })
     }
 
@@ -54,14 +54,14 @@ describe 'facter' do
         'owner'  => 'root',
         'group'  => 'root',
         'mode'   => '0755',
-        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/facter/facts.d]'
       })
     }
 
     it {
       should contain_exec('mkdir_p-/etc/facter/facts.d').with({
         'command' => 'mkdir -p /etc/facter/facts.d',
-        'unless'  => 'test -d /etc/facter/facts.d',
+        'unless'  => 'test -d /etc/facter/facts.d'
       })
     }
   end
@@ -75,7 +75,7 @@ describe 'facter' do
     it {
       should contain_package('facter').with({
         'ensure' => 'present',
-        'name'   => 'facter',
+        'name'   => 'facter'
       })
     }
 
@@ -86,14 +86,14 @@ describe 'facter' do
         'owner'  => 'root',
         'group'  => 'root',
         'mode'   => '0755',
-        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/facter/facts.d]'
       })
     }
 
     it {
       should contain_exec('mkdir_p-/etc/facter/facts.d').with({
         'command' => 'mkdir -p /etc/facter/facts.d',
-        'unless'  => 'test -d /etc/facter/facts.d',
+        'unless'  => 'test -d /etc/facter/facts.d'
       })
     }
   end
@@ -101,7 +101,7 @@ describe 'facter' do
   context 'with default options with manage_package = true and manage_facts_d_dir = false' do
     let(:params) do
       { :manage_package     => true,
-        :manage_facts_d_dir => false,
+        :manage_facts_d_dir => false
       }
     end
     let(:facts) { { :osfamily => 'RedHat' } }
@@ -111,7 +111,7 @@ describe 'facter' do
     it {
       should contain_package('facter').with({
         'ensure' => 'present',
-        'name'   => 'facter',
+        'name'   => 'facter'
       })
     }
 
@@ -123,7 +123,7 @@ describe 'facter' do
   context 'with default options with manage_package = false and manage_facts_d_dir = true' do
     let(:params) do
       { :manage_package     => false,
-        :manage_facts_d_dir => true,
+        :manage_facts_d_dir => true
       }
     end
     let(:facts) { { :osfamily => 'RedHat' } }
@@ -139,14 +139,14 @@ describe 'facter' do
         'owner'  => 'root',
         'group'  => 'root',
         'mode'   => '0755',
-        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/facter/facts.d]'
       })
     }
 
     it {
       should contain_exec('mkdir_p-/etc/facter/facts.d').with({
         'command' => 'mkdir -p /etc/facter/facts.d',
-        'unless'  => 'test -d /etc/facter/facts.d',
+        'unless'  => 'test -d /etc/facter/facts.d'
       })
     }
   end
@@ -154,7 +154,7 @@ describe 'facter' do
   context 'with default options with manage_package = false and manage_facts_d_dir = false' do
     let(:params) do
       { :manage_package     => false,
-        :manage_facts_d_dir => false,
+        :manage_facts_d_dir => false
       }
     end
     let(:facts) { { :osfamily => 'RedHat' } }
@@ -174,11 +174,11 @@ describe 'facter' do
       {
         :facts => {
           'fact1' => {
-            'value' => 'fact1value',
+            'value' => 'fact1value'
           },
           'fact2' => {
-            'value' => 'fact2value',
-          },
+            'value' => 'fact2value'
+          }
         }
       }
     end
@@ -189,19 +189,19 @@ describe 'facter' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
+        'require' => 'File[facts_d_directory]'
       })
     }
 
     it {
       should contain_file_line('fact_line_fact1').with({
-        'line' => 'fact1=fact1value',
+        'line' => 'fact1=fact1value'
       })
     }
 
     it {
       should contain_file_line('fact_line_fact2').with({
-        'line' => 'fact2=fact2value',
+        'line' => 'fact2=fact2value'
       })
     }
 
@@ -216,17 +216,17 @@ describe 'facter' do
         :facts_file => "file.txt",
         :facts => {
           'fact1' => {
-            'value' => 'fact1value',
+            'value' => 'fact1value'
           },
           'fact2' => {
             'value' => 'fact2value',
-            'file'  => 'file2.txt',
+            'file'  => 'file2.txt'
           },
           'fact3' => {
             'value'     => 'fact3value',
             'file'      => 'file3.txt',
-            'facts_dir' => '/etc/facts3',
-          },
+            'facts_dir' => '/etc/facts3'
+          }
         }
       }
     end
@@ -237,7 +237,7 @@ describe 'facter' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
+        'require' => 'File[facts_d_directory]'
       })
     }
 
@@ -247,7 +247,7 @@ describe 'facter' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
+        'require' => 'File[facts_d_directory]'
       })
     }
 
@@ -257,25 +257,25 @@ describe 'facter' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
+        'require' => 'File[facts_d_directory]'
       })
     }
 
     it {
       should contain_file_line('fact_line_fact1').with({
-        'line' => 'fact1=fact1value',
+        'line' => 'fact1=fact1value'
       })
     }
 
     it {
       should contain_file_line('fact_line_fact2').with({
-        'line' => 'fact2=fact2value',
+        'line' => 'fact2=fact2value'
       })
     }
 
     it {
       should contain_file_line('fact_line_fact3').with({
-        'line' => 'fact3=fact3value',
+        'line' => 'fact3=fact3value'
       })
     }
 
@@ -298,8 +298,8 @@ describe 'facter' do
         :facts_file_mode  => '0775',
         :facts => {
           'fact' => {
-            'value' => 'value',
-          },
+            'value' => 'value'
+          }
         }
       }
     end
@@ -308,7 +308,7 @@ describe 'facter' do
 
     it {
       should contain_package('myfacter').with({
-        'ensure' => 'absent',
+        'ensure' => 'absent'
       })
     }
 
@@ -319,14 +319,14 @@ describe 'facter' do
         'owner'   => 'puppet',
         'group'   => 'puppet',
         'mode'    => '0775',
-        'require' => 'Common::Mkdir_p[/etc/puppet/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/puppet/facter/facts.d]'
       })
     }
 
     it {
       should contain_exec('mkdir_p-/etc/puppet/facter/facts.d').with({
         'command' => 'mkdir -p /etc/puppet/facter/facts.d',
-        'unless'  => 'test -d /etc/puppet/facter/facts.d',
+        'unless'  => 'test -d /etc/puppet/facter/facts.d'
       })
     }
 
@@ -336,13 +336,13 @@ describe 'facter' do
         'owner'   => 'puppet',
         'group'   => 'puppet',
         'mode'    => '0775',
-        'require' => 'File[facts_d_directory]',
+        'require' => 'File[facts_d_directory]'
       })
     }
 
     it {
       should contain_file_line('fact_line_fact').with({
-        'line' => 'fact=value',
+        'line' => 'fact=value'
       })
     }
   end
@@ -354,7 +354,7 @@ describe 'facter' do
 
       it {
         should contain_package('myfacter').with({
-          'ensure' => 'present',
+          'ensure' => 'present'
         })
       }
     end
@@ -365,13 +365,13 @@ describe 'facter' do
 
       it {
         should contain_package('facter').with({
-          'ensure' => 'present',
+          'ensure' => 'present'
         })
       }
 
       it {
         should contain_package('facterfoo').with({
-          'ensure' => 'present',
+          'ensure' => 'present'
         })
       }
     end
@@ -396,7 +396,7 @@ describe 'facter' do
 
         it {
           should contain_package('facter').with({
-            'ensure' => value,
+            'ensure' => value
           })
         }
       end
@@ -468,7 +468,7 @@ describe 'facter' do
           should contain_file('facter_symlink').with({
             'ensure'  => 'link',
             'path'    => '/usr/local/bin/facter',
-            'target'  => '/usr/bin/facter',
+            'target'  => '/usr/bin/facter'
           })
         }
       end
@@ -488,7 +488,7 @@ describe 'facter' do
       let(:params) do
         { :ensure_facter_symlink  => true,
           :path_to_facter         => '/foo/bar',
-          :path_to_facter_symlink => '/bar',
+          :path_to_facter_symlink => '/bar'
         }
       end
 
@@ -496,7 +496,7 @@ describe 'facter' do
         should contain_file('facter_symlink').with({
           'ensure'  => 'link',
           'path'    => '/bar',
-          'target'  => '/foo/bar',
+          'target'  => '/foo/bar'
         })
       }
     end
@@ -506,7 +506,7 @@ describe 'facter' do
     context 'path_to_facter' do
       let(:params) do
         {
-          :path_to_facter => 'invalid/path',
+          :path_to_facter => 'invalid/path'
         }
       end
 
@@ -520,7 +520,7 @@ describe 'facter' do
     context 'path_to_facter_symlink' do
       let(:params) do
         {
-          :path_to_facter_symlink => 'invalid/path',
+          :path_to_facter_symlink => 'invalid/path'
         }
       end
 
