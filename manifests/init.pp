@@ -34,21 +34,21 @@ class facter (
   validate_absolute_path($path_to_facter_symlink)
   validate_absolute_path($path_to_facter)
 
-  if type($manage_package) == 'string' {
+  if is_string($manage_package) {
     $manage_package_real = str2bool($manage_package)
   } else {
     validate_bool($manage_package)
     $manage_package_real = $manage_package
   }
 
-  if type($manage_facts_d_dir) == 'string' {
+  if is_string($manage_facts_d_dir) {
     $manage_facts_d_dir_real = str2bool($manage_facts_d_dir)
   } else {
     validate_bool($manage_facts_d_dir)
     $manage_facts_d_dir_real = $manage_facts_d_dir
   }
 
-  if type($package_name) != 'String' and type($package_name) != 'Array' {
+  if !is_string($package_name) and !is_array($package_name) {
     fail('facter::package_name must be a string or an array.')
   }
 
@@ -73,7 +73,7 @@ class facter (
     }
   }
 
-  if type($ensure_facter_symlink) == 'string' {
+  if is_string($ensure_facter_symlink) {
     $ensure_facter_symlink_bool = str2bool($ensure_facter_symlink)
   } else {
     $ensure_facter_symlink_bool = $ensure_facter_symlink
