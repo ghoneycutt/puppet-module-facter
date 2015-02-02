@@ -22,7 +22,7 @@ describe 'facter' do
         'owner'  => 'root',
         'group'  => 'root',
         'mode'   => '0755',
-        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
       })
     }
 
@@ -54,7 +54,7 @@ describe 'facter' do
         'owner'  => 'root',
         'group'  => 'root',
         'mode'   => '0755',
-        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
       })
     }
 
@@ -86,7 +86,7 @@ describe 'facter' do
         'owner'  => 'root',
         'group'  => 'root',
         'mode'   => '0755',
-        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
       })
     }
 
@@ -139,7 +139,7 @@ describe 'facter' do
         'owner'  => 'root',
         'group'  => 'root',
         'mode'   => '0755',
-        'require' => 'Common::Mkdir_p[/etc/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
       })
     }
 
@@ -319,7 +319,7 @@ describe 'facter' do
         'owner'   => 'puppet',
         'group'   => 'puppet',
         'mode'    => '0775',
-        'require' => 'Common::Mkdir_p[/etc/puppet/facter/facts.d]',
+        'require' => 'Exec[mkdir_p-/etc/puppet/facter/facts.d]',
       })
     }
 
@@ -553,5 +553,4 @@ describe 'facter' do
       }.to raise_error(Puppet::Error)
     end
   end
-
 end
