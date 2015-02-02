@@ -1,5 +1,5 @@
 name    'ghoneycutt-facter'
-version '1.3.2'
+version '2.0.0'
 source 'git://github.com/ghoneycutt/puppet-module-facter.git'
 author 'ghoneycutt'
 license 'Apache-2.0'
