@@ -61,7 +61,11 @@ class facter (
 
   if $manage_facts_d_dir_real == true {
 
-    common::mkdir_p { $facts_d_dir: }
+    exec { "mkdir_p-${facts_d_dir}":
+      command => "mkdir -p ${facts_d_dir}",
+      unless  => "test -d ${facts_d_dir}",
+      path    => '/bin:/usr/bin',
+    }
 
     file { 'facts_d_directory':
       ensure  => 'directory',
@@ -69,7 +73,7 @@ class facter (
       owner   => $facts_d_owner,
       group   => $facts_d_group,
       mode    => $facts_d_mode,
-      require => Common::Mkdir_p[$facts_d_dir],
+      require => Exec["mkdir_p-${facts_d_dir}"],
     }
   }
 

@@ -8,4 +8,3 @@ description 'Manage Facter and optionally ensure facts.d directory.'
 project_page 'https://github.com/ghoneycutt/puppet-module-facter'
 
 dependency 'puppetlabs/stdlib', '>= 3.2.0'
-dependency 'ghoneycutt/common', '>= 1.0.0'
