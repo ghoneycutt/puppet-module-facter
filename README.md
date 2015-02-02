@@ -82,8 +82,8 @@ Boolean for ensuring a symlink for path_to_facter to symlink_facter_target. This
 
 - *Default*: false
 
-facts
------
+facts_hash
+----------
 Hash of facts to be passed to facter::fact with create_resources().
 
 - *Default*: undef
