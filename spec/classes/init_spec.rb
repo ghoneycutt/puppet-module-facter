@@ -172,7 +172,7 @@ describe 'facter' do
     let(:facts) { { :osfamily => 'RedHat' } }
     let(:params) do
       {
-        :facts => {
+        :facts_hash => {
           'fact1' => {
             'value' => 'fact1value',
           },
@@ -214,7 +214,7 @@ describe 'facter' do
     let(:params) do
       {
         :facts_file => "file.txt",
-        :facts => {
+        :facts_hash => {
           'fact1' => {
             'value' => 'fact1value',
           },
@@ -296,7 +296,7 @@ describe 'facter' do
         :facts_file_owner => 'puppet',
         :facts_file_group => 'puppet',
         :facts_file_mode  => '0775',
-        :facts => {
+        :facts_hash => {
           'fact' => {
             'value' => 'value',
           },
@@ -534,7 +534,7 @@ describe 'facter' do
 
   context 'with invalid facts param' do
     let(:facts) { { :osfamily => 'RedHat' } }
-    let(:params) { { :facts => ['array','is','invalid'] } }
+    let(:params) { { :facts_hash => ['array','is','invalid'] } }
 
     it do
       expect {
