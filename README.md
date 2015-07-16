@@ -95,27 +95,21 @@ Hash of facts to be passed to facter::fact with create_resources().
 
 - *Default*: undef
 
-facts_file
-----------
-Filename under `facts_d_dir` to place facts in
-
-- *Default*: facts.txt
-
 facts_file_owner
 ----------------
-Owner of facts_file.
+Owner of facts_files.
 
 - *Default*: root
 
 facts_d_group
 -------------
-Group of facst_file.
+Group of facst_files.
 
 - *Default*: root
 
 facts_d_mode
 ------------
-Four digit mode of facts_file.
+Four digit mode of facts_files.
 
 - *Default*: 0644
 
@@ -134,15 +128,15 @@ facter::facts:
     value: 'puppetmaster'
   location:
     value: 'RNB'
-    file: 'location.txt'
+    file: 'place'
 </pre>
 
-The above configuration in Hiera would produce `/etc/facter/facts.d/facts.txt` with the following content.
+The above configuration in Hiera would produce `/etc/facter/facts.d/role.txt` with the following content.
 <pre>
 role=puppetmaster
 </pre>
 
-It would also produce `/etc/facter/facts.d/location.txt` with the following content.
+It would also produce `/etc/facter/facts.d/place.txt` with the following content.
 <pre>
 location=RNB
 </pre>
@@ -163,7 +157,7 @@ file
 ----
 File under `facts_dir` in which to place the fact.
 
-- *Default*: 'facts.txt'
+- *Default*: $name
 
 facts_dir
 ---------
