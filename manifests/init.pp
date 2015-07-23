@@ -15,7 +15,7 @@ class facter (
   $path_to_facter         = '/usr/bin/facter',
   $path_to_facter_symlink = '/usr/local/bin/facter',
   $ensure_facter_symlink  = false,
-  $facts_hash             = undef,
+  $facts_hash             = {},
   $facts_file             = 'facts.txt',
   $facts_file_owner       = 'root',
   $facts_file_group       = 'root',
@@ -104,18 +104,19 @@ class facter (
     }
   }
 
+  validate_absolute_path("${facts_d_dir}/${facts_file}")
+  file { 'facts_file':
+    ensure  => file,
+    path    => "${facts_d_dir}/${facts_file}",
+    owner   => $facts_file_owner,
+    group   => $facts_file_group,
+    mode    => $facts_file_mode,
+    require => File['facts_d_directory'],
+  }
+
   # optionally push fact to client
-  if $facts_hash != undef {
-    validate_hash($facts_hash)
-    validate_absolute_path("${facts_d_dir}/${facts_file}")
-    file { 'facts_file':
-      ensure  => file,
-      path    => "${facts_d_dir}/${facts_file}",
-      owner   => $facts_file_owner,
-      group   => $facts_file_group,
-      mode    => $facts_file_mode,
-      require => File['facts_d_directory'],
-    }
+  validate_hash($facts_hash)
+  if ! empty( $facts_hash ) {
     $facts_defaults = {
       'file'      => $facts_file,
       'facts_dir' => $facts_d_dir,
