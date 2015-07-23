@@ -52,9 +52,9 @@ class facter (
   if is_string($purge_facts_d) {
     $purge_facts_d_real = str2bool($purge_facts_d)
   } else {
-    validate_bool($purge_facts_d)
     $purge_facts_d_real = $purge_facts_d
   }
+  validate_bool($purge_facts_d_real)
 
   if !is_string($package_name) and !is_array($package_name) {
     fail('facter::package_name must be a string or an array.')

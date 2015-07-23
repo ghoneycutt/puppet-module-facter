@@ -41,11 +41,10 @@ Boolean to manage the directory.
 - *Default*: true
 
 purge_facts_d
-------------------
+-------------
 Boolean to delete unmanaged fact files from the facts.d directory.
 
 - *Default*: false
-
 
 facts_d_dir
 -----------

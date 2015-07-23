@@ -17,11 +17,13 @@ describe 'facter' do
 
     it {
       should contain_file('facts_d_directory').with({
-        'ensure' => 'directory',
-        'path'   => '/etc/facter/facts.d',
-        'owner'  => 'root',
-        'group'  => 'root',
-        'mode'   => '0755',
+        'ensure'  => 'directory',
+        'path'    => '/etc/facter/facts.d',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0755',
+        'purge'   => false,
+        'recurse' => false,
         'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
       })
     }
@@ -32,6 +34,56 @@ describe 'facter' do
         'unless'  => 'test -d /etc/facter/facts.d',
       })
     }
+  end
+
+  describe 'with purge_facts_d' do
+    ['true',true].each do |value|
+      context "set to #{value}" do
+        let(:params) { { :purge_facts_d => value } }
+        let(:facts) { { :osfamily => 'RedHat' } }
+
+        it {
+          should contain_file('facts_d_directory').with({
+            'ensure'  => 'directory',
+            'path'    => '/etc/facter/facts.d',
+            'owner'   => 'root',
+            'group'   => 'root',
+            'mode'    => '0755',
+            'purge'   => true,
+            'recurse' => true,
+            'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
+          })
+        }
+      end
+    end
+    ['false',false].each do |value|
+      context "set to #{value}" do
+        let(:params) { { :purge_facts_d => value } }
+        let(:facts) { { :osfamily => 'RedHat' } }
+
+        it {
+          should contain_file('facts_d_directory').with({
+            'ensure'  => 'directory',
+            'path'    => '/etc/facter/facts.d',
+            'owner'   => 'root',
+            'group'   => 'root',
+            'mode'    => '0755',
+            'purge'   => false,
+            'recurse' => false,
+            'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
+          })
+        }
+      end
+    end
+    context 'set to an invalid type' do
+      let(:params) { { :purge_facts_d => ['invalid', 'type'] } }
+
+      it do
+        expect {
+          should contain_class('facter')
+        }.to raise_error(Puppet::Error,/\["invalid", "type"\] is not a boolean/)
+      end
+    end
   end
 
   context 'with default options and stringified \'true\' for manage_package param' do
@@ -49,11 +101,13 @@ describe 'facter' do
 
     it {
       should contain_file('facts_d_directory').with({
-        'ensure' => 'directory',
-        'path'   => '/etc/facter/facts.d',
-        'owner'  => 'root',
-        'group'  => 'root',
-        'mode'   => '0755',
+        'ensure'  => 'directory',
+        'path'    => '/etc/facter/facts.d',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0755',
+        'purge'   => false,
+        'recurse' => false,
         'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
       })
     }
@@ -81,11 +135,13 @@ describe 'facter' do
 
     it {
       should contain_file('facts_d_directory').with({
-        'ensure' => 'directory',
-        'path'   => '/etc/facter/facts.d',
-        'owner'  => 'root',
-        'group'  => 'root',
-        'mode'   => '0755',
+        'ensure'  => 'directory',
+        'path'    => '/etc/facter/facts.d',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0755',
+        'purge'   => false,
+        'recurse' => false,
         'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
       })
     }
@@ -319,6 +375,8 @@ describe 'facter' do
         'owner'   => 'puppet',
         'group'   => 'puppet',
         'mode'    => '0775',
+        'purge'   => false,
+        'recurse' => false,
         'require' => 'Exec[mkdir_p-/etc/puppet/facter/facts.d]',
       })
     }
