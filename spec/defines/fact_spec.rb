@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe 'facter::fact' do
 
-  context 'with fact and folder specified' do
+  context 'with fact and facts_dir specified' do
     let(:title) { 'fact1' }
     let(:params) do
       {

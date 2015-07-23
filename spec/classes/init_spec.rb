@@ -209,7 +209,7 @@ describe 'facter' do
     it { should contain_exec('mkdir_p-/etc/facter/facts.d') }
   end
 
-  context 'with facts specified as a hash with different file and folder on RedHat' do
+  context 'with facts specified as a hash with different file and facts_dir on RedHat' do
     let(:facts) { { :osfamily => 'RedHat' } }
     let(:params) do
       {
