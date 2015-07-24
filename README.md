@@ -9,7 +9,8 @@ Puppet module to manage Facter
 
 # Compatibility
 ---------------
-This module is built for use with Puppet v3 and supports Ruby v1.8.7, v1.9.3, v2.0.0 and v2.1.0.
+This module is built for use with Puppet v3 (with and without the future parse)
+and supports Ruby v1.8.7, v1.9.3, v2.0.0 and v2.1.0.
 
 ===
 
@@ -39,6 +40,12 @@ manage_facts_d_dir
 Boolean to manage the directory.
 
 - *Default*: true
+
+purge_facts_d
+-------------
+Boolean to delete unmanaged fact files from the facts.d directory.
+
+- *Default*: false
 
 facts_d_dir
 -----------
