@@ -9,7 +9,7 @@ define facter::fact (
   $facts_dir = '/etc/facter/facts.d',
 ) {
 
-  include 'facter'
+  include ::facter
 
   $match = "^${name}=\\S*$"
 
