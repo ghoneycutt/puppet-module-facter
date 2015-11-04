@@ -15,6 +15,16 @@ describe 'facter' do
       })
     }
 
+    it { should contain_file('facts_file').with({
+        'ensure'  => 'file',
+        'path'    => '/etc/facter/facts.d/facts.txt',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0644',
+        'require' => 'File[facts_d_directory]',
+      })
+    }
+
     it {
       should contain_file('facts_d_directory').with({
         'ensure'  => 'directory',
