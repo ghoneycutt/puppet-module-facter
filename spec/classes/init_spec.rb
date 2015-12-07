@@ -621,4 +621,51 @@ describe 'facter' do
       }.to raise_error(Puppet::Error)
     end
   end
+
+  describe 'with facter::facts_hash_hiera_merge' do
+    let :facts do
+      {
+        :osfamily => 'RedHat',
+        :fqdn     => 'hieramerge.example.local',
+        :group    => 'spectest',
+      }
+    end
+
+    context 'set to value value true' do
+      let(:params) { { :facts_hash_hiera_merge => 'true' } }
+
+      it {
+        should contain_file_line('fact_line_role').with({
+          'line' => 'role=puppetmaster',
+        })
+      }
+      it { should contain_file('facts_file_location') }
+      it {
+        should contain_file_line('fact_line_location').with({
+          'line' => 'location=RNB',
+        })
+      }
+    end
+
+    context 'set to valid value false' do
+      let(:params) { { :facts_hash_hiera_merge => 'false' } }
+
+      it {
+        should contain_file_line('fact_line_role').with({
+          'line' => 'role=puppetmaster',
+        })
+      }
+      it { should_not contain_file('facts_file_location') }
+    end
+
+    context 'set to invalid value <invalid>' do
+      let(:params) { { :facts_hash_hiera_merge => 'invalid' } }
+
+      it 'should fail' do
+        expect {
+          should contain_class('facter')
+        }.to raise_error(Puppet::Error,/str2bool\(\): Unknown type of boolean given at/)
+      end
+    end
+  end
 end
