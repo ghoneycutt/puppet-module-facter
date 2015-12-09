@@ -28,4 +28,4 @@ doc/
 # Puppet
 coverage/
 spec/fixtures/modules/*
-spec/fixtures
+spec/fixtures/manifests/*
