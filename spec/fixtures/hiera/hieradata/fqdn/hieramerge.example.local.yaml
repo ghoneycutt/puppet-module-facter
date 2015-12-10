@@ -1,4 +1,0 @@
----
-facter::facts_hash:
-  role:
-    value: 'puppetmaster'
