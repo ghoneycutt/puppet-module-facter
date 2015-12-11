@@ -621,4 +621,104 @@ describe 'facter' do
       }.to raise_error(Puppet::Error)
     end
   end
+
+  describe 'with facter::facts_hash_hiera_merge' do
+    let :facts do
+      {
+        :osfamily        => 'RedHat',
+        :fqdn            => 'hieramerge.example.local',
+        :parameter_tests => 'facts_hash_hiera_merge',
+      }
+    end
+
+    context 'set to valid value true' do
+      let(:params) { { :facts_hash_hiera_merge => 'true' } }
+
+      it { should have_facter__fact_resource_count(2) }
+      it do
+        should contain_facter__fact('role').with({
+          'file'      => 'facts.txt',
+          'facts_dir' => '/etc/facter/facts.d',
+          'value'     => 'puppetmaster',
+        })
+      end
+      it do
+        should contain_facter__fact('location').with({
+          'file'      => 'location.txt',
+          'facts_dir' => '/etc/facter/facts.d',
+          'value'     => 'RNB',
+        })
+      end
+    end
+
+    context 'set to valid value false' do
+      let(:params) { { :facts_hash_hiera_merge => 'false' } }
+
+      it { should have_facter__fact_resource_count(1) }
+      it do
+        should contain_facter__fact('role').with({
+          'file'      => 'facts.txt',
+          'facts_dir' => '/etc/facter/facts.d',
+          'value'     => 'puppetmaster',
+        })
+      end
+      it { should_not contain_facter__fact('location') }
+    end
+
+    context 'set to invalid value <invalid>' do
+      let(:params) { { :facts_hash_hiera_merge => 'invalid' } }
+
+      it 'should fail' do
+        expect {
+          should contain_class('facter')
+        }.to raise_error(Puppet::Error,/str2bool\(\): Unknown type of boolean given at/)
+      end
+    end
+  end
+
+  describe 'variable type and content validations' do
+    # set needed custom facts and variables
+    let(:facts) do
+      {
+       :fqdn => 'hieramerge.example.local',
+      }
+    end
+    let(:validation_params) do
+      {
+        #:param => 'value',
+      }
+    end
+
+    validations = {
+      'bool_stringified' => {
+        :name    => %w(facts_hash_hiera_merge),
+        :valid   => [true, 'true', false, 'false'],
+        :invalid => ['invalid', 3, 2.42, %w(array), { 'ha' => 'sh' }, nil],
+        :message => '(is not a boolean|Unknown type of boolean)',
+      },
+    }
+
+    validations.sort.each do |type, var|
+      var[:name].each do |var_name|
+        var[:valid].each do |valid|
+          context "with #{var_name} (#{type}) set to valid #{valid} (as #{valid.class})" do
+            let(:params) { validation_params.merge({ :"#{var_name}" => valid, }) }
+            it { should compile }
+          end
+        end
+
+        var[:invalid].each do |invalid|
+          context "with #{var_name} (#{type}) set to invalid #{invalid} (as #{invalid.class})" do
+            let(:params) { validation_params.merge({ :"#{var_name}" => invalid, }) }
+            it 'should fail' do
+              expect do
+                should contain_class(subject)
+              end.to raise_error(Puppet::Error, /#{var[:message]}/)
+            end
+          end
+        end
+      end # var[:name].each
+    end # validations.sort.each
+  end # describe 'variable type and content validations'
+
 end

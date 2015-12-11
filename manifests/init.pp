@@ -16,6 +16,7 @@ class facter (
   $path_to_facter_symlink = '/usr/local/bin/facter',
   $ensure_facter_symlink  = false,
   $facts_hash             = {},
+  $facts_hash_hiera_merge = false,
   $facts_file             = 'facts.txt',
   $facts_file_owner       = 'root',
   $facts_file_group       = 'root',
@@ -115,12 +116,25 @@ class facter (
   }
 
   # optionally push fact to client
-  validate_hash($facts_hash)
-  if ! empty( $facts_hash ) {
+  if is_string($facts_hash_hiera_merge) {
+    $facts_hash_hiera_merge_real = str2bool($facts_hash_hiera_merge)
+  } else {
+    $facts_hash_hiera_merge_real = $facts_hash_hiera_merge
+  }
+  validate_bool($facts_hash_hiera_merge_real)
+
+  if $facts_hash_hiera_merge_real == true {
+    $facts_hash_real = hiera_hash('facter::facts_hash')
+  } else {
+    $facts_hash_real = $facts_hash
+  }
+
+  validate_hash($facts_hash_real)
+  if ! empty( $facts_hash_real ) {
     $facts_defaults = {
       'file'      => $facts_file,
       'facts_dir' => $facts_d_dir,
     }
-    create_resources('facter::fact',$facts_hash, $facts_defaults)
+    create_resources('facter::fact',$facts_hash_real, $facts_defaults)
   }
 }

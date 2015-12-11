@@ -96,6 +96,12 @@ Hash of facts to be passed to facter::fact with create_resources().
 
 - *Default*: undef
 
+facts_hash_hiera_merge
+----------------------
+Boolean to control merges of all found instances of facter::facts_hash in Hiera. This is useful for specifying facts entries at different levels of the hierarchy and having them all included in the catalog.
+
+- *Default*: false
+
 facts_file
 ----------
 Filename under `facts_d_dir` to place facts in
