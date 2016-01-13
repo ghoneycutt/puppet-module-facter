@@ -124,7 +124,7 @@ class facter (
   validate_bool($facts_hash_hiera_merge_real)
 
   if $facts_hash_hiera_merge_real == true {
-    $facts_hash_real = hiera_hash('facter::facts_hash')
+    $facts_hash_real = hiera_hash('facter::facts_hash', {})
   } else {
     $facts_hash_real = $facts_hash
   }
