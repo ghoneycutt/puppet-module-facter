@@ -136,7 +136,7 @@ Ensures a fact is present in the fact file with stdlib file_line() in fact=value
 You can optionally specify a hash of external facts in Hiera.
 <pre>
 ---
-facter::facts:
+facter::facts_hash:
   role:
     value: 'puppetmaster'
   location:
