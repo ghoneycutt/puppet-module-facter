@@ -1,3 +1,0 @@
-v2.0.0
-  - Changed facter::facts to facter::facts_hash as $facts is now reserved for
-    use with trusted node data.
