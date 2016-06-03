@@ -3,7 +3,7 @@
 
 [![Build Status](https://travis-ci.org/ghoneycutt/puppet-module-facter.png?branch=master)](https://travis-ci.org/ghoneycutt/puppet-module-facter)
 
-Puppet module to manage Facter
+Puppet module to manage Facter. To use simply `include ::facter`.
 
 ===
 
