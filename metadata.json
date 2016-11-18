@@ -10,14 +10,10 @@
   "issues_url": "https://github.com/ghoneycutt/puppet-module-facter/issues",
   "description": "Manage Facter and optionally ensure facts.d directory.",
   "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": ">= 3.0.0 < 5.0.0"
-    },
-    {
-      "name": "puppet",
-      "version_requirement": ">= 3.0.0 < 5.0.0"
-    }
+    {"name":"puppet","version_requirement":">= 3.0.0 < 5.0.0"}
+  ],
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 4.6.0 < 6.0.0"}
   ],
   "operatingsystem_support": [
     {
@@ -50,8 +46,5 @@
     {
       "operatingsystem": "Ubuntu"
     }
-  ],
-  "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 4.6.0 < 6.0.0"}
   ]
 }
