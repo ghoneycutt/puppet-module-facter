@@ -10,4 +10,9 @@ RSpec.configure do |config|
     Facter.clear
     Facter.clear_messages
   end
+  config.default_facts = {
+    :environment     => 'rp_env',
+    :parameter_tests => 'fix_for_hiera_v2_with_puppet_v4.0-4.2',
+    :fqdn            => 'hiera2.fix',
+  }
 end
