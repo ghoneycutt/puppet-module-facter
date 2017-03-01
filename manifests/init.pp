@@ -86,6 +86,10 @@ class facter (
       recurse => $purge_facts_d_real,
       require => Exec["mkdir_p-${facts_d_dir}"],
     }
+
+    File{
+      require => File['facts_d_directory'],
+    }
   }
 
   if is_string($ensure_facter_symlink) {
@@ -112,7 +116,6 @@ class facter (
     owner   => $facts_file_owner,
     group   => $facts_file_group,
     mode    => $facts_file_mode,
-    require => File['facts_d_directory'],
   }
 
   # optionally push fact to client
