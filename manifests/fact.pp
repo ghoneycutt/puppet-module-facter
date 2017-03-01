@@ -6,7 +6,7 @@ define facter::fact (
   $value,
   $fact      = $name,
   $file      = 'facts.txt',
-  $facts_dir = '/etc/facter/facts.d',
+  $facts_dir = '/etc/facter/facts.d/',
 ) {
 
   include ::facter

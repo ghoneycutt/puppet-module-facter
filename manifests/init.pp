@@ -3,25 +3,25 @@
 # Manage facter
 #
 class facter (
-  $manage_package         = true,
-  $package_name           = 'facter',
-  $package_ensure         = 'present',
-  $manage_facts_d_dir     = true,
-  $purge_facts_d          = false,
-  $facts_d_dir            = '/etc/facter/facts.d',
-  $facts_d_owner          = 'root',
-  $facts_d_group          = 'root',
-  $facts_d_mode           = '0755',
-  $path_to_facter         = '/usr/bin/facter',
-  $path_to_facter_symlink = '/usr/local/bin/facter',
-  $ensure_facter_symlink  = false,
-  $facts_hash             = {},
-  $facts_hash_hiera_merge = false,
-  $facts_file             = 'facts.txt',
-  $facts_file_owner       = 'root',
-  $facts_file_group       = 'root',
-  $facts_file_mode        = '0644',
-) {
+  $manage_package         = $facter::params::manage_package,
+  $package_name           = $facter::params::package_name,
+  $package_ensure         = $facter::params::package_ensure,
+  $manage_facts_d_dir     = $facter::params::manage_facts_d_dir,
+  $purge_facts_d          = $facter::params::purge_facts_d,
+  $facts_d_dir            = $facter::params::facts_d_dir,
+  $facts_d_owner          = $facter::params::facts_d_owner,
+  $facts_d_group          = $facter::params::facts_d_group,
+  $facts_d_mode           = $facter::params::facts_d_mode,
+  $path_to_facter         = $facter::params::path_to_facter,
+  $path_to_facter_symlink = $facter::params::path_to_facter_symlink,
+  $ensure_facter_symlink  = $facter::params::ensure_facter_symlink,
+  $facts_hash             = $facter::params::facts_hash,
+  $facts_hash_hiera_merge = $facter::params::facts_hash_hiera_merge,
+  $facts_file             = $facter::params::facts_file,
+  $facts_file_owner       = $facter::params::facts_file_owner,
+  $facts_file_group       = $facter::params::facts_file_group,
+  $facts_file_mode        = $facter::params::facts_file_mode,
+) inherits facter::params {
 
   validate_string($package_ensure)
 
