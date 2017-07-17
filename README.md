@@ -21,7 +21,8 @@ of tested Ruby and Puppet versions.
 
 manage_package
 --------------
-Boolean to manage the package resource.
+Boolean to manage the package resource. Not honored with Puppet 4 where
+it will be false since facter is included in the puppet-agent package.
 
 - *Default*: true
 
