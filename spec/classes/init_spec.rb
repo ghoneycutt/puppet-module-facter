@@ -96,6 +96,17 @@ describe 'facter' do
     end
   end
 
+  describe 'on puppet4 the package should not be managed' do
+    let(:facts) { { :puppetversion => '4.10.0' } }
+    [true,false].each do |value|
+      context "with manage_package set to #{value}" do
+        let(:params) { { :manage_package => value } }
+
+        it { should_not contain_package('facter') }
+      end
+    end
+  end
+
   context 'with default options and stringified \'true\' for manage_package param' do
     let(:params) { { :manage_package => 'true' } }
     let(:facts) { { :osfamily => 'RedHat' } }

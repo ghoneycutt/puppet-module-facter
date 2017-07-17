@@ -3,7 +3,7 @@
 # Manage facter
 #
 class facter (
-  $manage_package         = true,
+  $manage_package         = undef,
   $package_name           = 'facter',
   $package_ensure         = 'present',
   $manage_facts_d_dir     = true,
@@ -36,11 +36,19 @@ class facter (
   validate_absolute_path($path_to_facter_symlink)
   validate_absolute_path($path_to_facter)
 
-  if is_string($manage_package) {
-    $manage_package_real = str2bool($manage_package)
+  if $::puppetversion =~ /^4/ {
+    $manage_package_real = false
+  } elsif $manage_package == undef {
+    $manage_package_real = true
   } else {
-    validate_bool($manage_package)
     $manage_package_real = $manage_package
+  }
+
+  if is_string($manage_package_real) {
+    $manage_package_bool = str2bool($manage_package_real)
+  } else {
+    $manage_package_bool = $manage_package_real
+    validate_bool($manage_package_bool)
   }
 
   if is_string($manage_facts_d_dir) {
@@ -61,7 +69,7 @@ class facter (
     fail('facter::package_name must be a string or an array.')
   }
 
-  if $manage_package_real == true {
+  if $manage_package_bool == true {
 
     package { $package_name:
       ensure => $package_ensure,
