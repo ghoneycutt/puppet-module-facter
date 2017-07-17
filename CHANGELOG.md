@@ -1,3 +1,7 @@
+### v3.3.1 - 2017-07-17
+  Do not manage package with Puppet v4 as it uses the AIO and facter is
+  part of the puppet-agent package.
+
 ### v3.3.0 - 2016-11-18
   Support Ruby 2.3.1
 
