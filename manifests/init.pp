@@ -36,7 +36,7 @@ class facter (
   validate_absolute_path($path_to_facter_symlink)
   validate_absolute_path($path_to_facter)
 
-  if $::puppetversion =~ /^4/ {
+  if versioncmp($::puppetversion, '4.0.0') >= 0 {
     $manage_package_real = false
   } elsif $manage_package == undef {
     $manage_package_real = true
@@ -115,12 +115,11 @@ class facter (
 
   validate_absolute_path("${facts_d_dir}/${facts_file}")
   file { 'facts_file':
-    ensure  => file,
-    path    => "${facts_d_dir}/${facts_file}",
-    owner   => $facts_file_owner,
-    group   => $facts_file_group,
-    mode    => $facts_file_mode,
-    require => File['facts_d_directory'],
+    ensure => file,
+    path   => "${facts_d_dir}/${facts_file}",
+    owner  => $facts_file_owner,
+    group  => $facts_file_group,
+    mode   => $facts_file_mode,
   }
 
   # optionally push fact to client

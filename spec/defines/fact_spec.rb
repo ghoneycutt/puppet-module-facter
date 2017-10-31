@@ -19,7 +19,6 @@ describe 'facter::fact' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
       })
     }
 

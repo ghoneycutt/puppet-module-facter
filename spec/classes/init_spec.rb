@@ -21,7 +21,6 @@ describe 'facter' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
       })
     }
 
@@ -92,6 +91,17 @@ describe 'facter' do
         expect {
           should contain_class('facter')
         }.to raise_error(Puppet::Error,/\["invalid", "type"\] is not a boolean/)
+      end
+    end
+  end
+
+  describe 'on puppet5 the package should not be managed' do
+    let(:facts) { { :puppetversion => '5.3.0' } }
+    [true,false].each do |value|
+      context "with manage_package set to #{value}" do
+        let(:params) { { :manage_package => value } }
+
+        it { should_not contain_package('facter') }
       end
     end
   end
@@ -266,7 +276,6 @@ describe 'facter' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
       })
     }
 
@@ -314,7 +323,6 @@ describe 'facter' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
       })
     }
 
@@ -324,7 +332,6 @@ describe 'facter' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
       })
     }
 
@@ -334,7 +341,6 @@ describe 'facter' do
         'owner'   => 'root',
         'group'   => 'root',
         'mode'    => '0644',
-        'require' => 'File[facts_d_directory]',
       })
     }
 
@@ -415,7 +421,6 @@ describe 'facter' do
         'owner'   => 'puppet',
         'group'   => 'puppet',
         'mode'    => '0775',
-        'require' => 'File[facts_d_directory]',
       })
     }
 
