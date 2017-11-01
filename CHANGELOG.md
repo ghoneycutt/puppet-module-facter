@@ -1,3 +1,6 @@
+### v3.4.0 - 2017-11-01
+  Support Puppet v5
+
 ### v3.3.1 - 2017-07-17
   Do not manage package with Puppet v4 as it uses the AIO and facter is
   part of the puppet-agent package.
