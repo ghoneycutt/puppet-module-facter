@@ -116,14 +116,14 @@ Owner of facts_file.
 
 - *Default*: root
 
-facts_d_group
--------------
-Group of facst_file.
+facts_file_group
+----------------
+Group of facts_file.
 
 - *Default*: root
 
-facts_d_mode
-------------
+facts_file_mode
+----------------
 Four digit mode of facts_file.
 
 - *Default*: 0644
