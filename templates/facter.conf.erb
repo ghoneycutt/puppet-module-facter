@@ -1,0 +1,4 @@
+# File managed by Puppet, do not edit
+<%- if @facter_conf -%>
+<%= JSON.pretty_generate(@facter_conf) %>
+<%- end -%>
