@@ -18,6 +18,15 @@ class facter (
   String $facts_file_owner                      = 'root',
   String $facts_file_group                      = 'root',
   Stdlib::Filemode $facts_file_mode             = '0644',
+  Stdlib::Absolutepath $facter_conf_dir         = '/etc/puppetlabs/facter',
+  String $facter_conf_dir_owner                 = 'root',
+  String $facter_conf_dir_group                 = 'root',
+  Stdlib::Filemode $facter_conf_dir_mode        = '0755',
+  String $facter_conf_name                      = 'facter.conf',
+  String $facter_conf_owner                     = 'root',
+  String $facter_conf_group                     = 'root',
+  Stdlib::Filemode $facter_conf_mode            = '0644',
+  Facter::Conf $facter_conf                     = {},
 ) {
 
   if $manage_facts_d_dir == true {
@@ -69,4 +78,30 @@ class facter (
     }
     create_resources('facter::fact',$facts_hash_real, $facts_defaults)
   }
+
+  exec { "mkdir_p-${facter_conf_dir}":
+    command => "mkdir -p ${facter_conf_dir}",
+    unless  => "test -d ${facter_conf_dir}",
+    path    => '/bin:/usr/bin',
+  }
+  file { $facter_conf_dir:
+    ensure  => 'directory',
+    owner   => $facter_conf_dir_owner,
+    group   => $facter_conf_dir_group,
+    mode    => $facter_conf_dir_mode,
+    require => Exec["mkdir_p-${facter_conf_dir}"],
+  }
+
+  if ! empty($facter_conf) {
+    # Template uses:
+    # - $facter_conf
+    file { "${facter_conf_dir}/${facter_conf_name}":
+      ensure  => 'file',
+      owner   => $facter_conf_owner,
+      group   => $facter_conf_group,
+      mode    => $facter_conf_mode,
+      content => template('facter/facter.conf.erb'),
+    }
+  }
+
 }

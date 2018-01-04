@@ -36,6 +36,25 @@ describe 'facter' do
         'unless'  => 'test -d /etc/facter/facts.d',
       })
     }
+
+    it {
+      should contain_exec('mkdir_p-/etc/puppetlabs/facter').with({
+        'command' => 'mkdir -p /etc/puppetlabs/facter',
+        'unless'  => 'test -d /etc/puppetlabs/facter',
+      })
+    }
+
+    it {
+      should contain_file('/etc/puppetlabs/facter').with({
+        'ensure'  => 'directory',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0755',
+        'require' => 'Exec[mkdir_p-/etc/puppetlabs/facter]',
+      })
+    }
+
+    it { should_not contain_file('/etc/puppetlabs/facter/facter.conf') }
   end
 
   describe 'with purge_facts_d' do
@@ -246,7 +265,10 @@ describe 'facter' do
           'fact' => {
             'value' => 'value',
           },
-        }
+        },
+        :facter_conf => {
+          'global' => { 'external-dir' => ['/foo'] },
+        },
       }
     end
 
@@ -284,6 +306,41 @@ describe 'facter' do
     it {
       should contain_file_line('fact_line_fact').with({
         'line' => 'fact=value',
+      })
+    }
+
+    it {
+      should contain_exec('mkdir_p-/etc/puppetlabs/facter').with({
+        'command' => 'mkdir -p /etc/puppetlabs/facter',
+        'unless'  => 'test -d /etc/puppetlabs/facter',
+      })
+    }
+
+    it {
+      should contain_file('/etc/puppetlabs/facter').with({
+        'ensure'  => 'directory',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'mode'    => '0755',
+        'require' => 'Exec[mkdir_p-/etc/puppetlabs/facter]',
+      })
+    }
+
+    it {
+      should contain_file('/etc/puppetlabs/facter/facter.conf').with({
+        'ensure' => 'file',
+        'owner'  => 'root',
+        'group'  => 'root',
+        'mode'   => '0644',
+        'content' => '# File managed by Puppet, do not edit
+{
+  "global": {
+    "external-dir": [
+      "/foo"
+    ]
+  }
+}
+'
       })
     }
   end
