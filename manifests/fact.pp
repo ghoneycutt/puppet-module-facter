@@ -6,7 +6,7 @@ define facter::fact (
   $value,
   String $fact                    = $name,
   String $file                    = 'facts.txt',
-  Stdlib::Absolutepath $facts_dir = '/etc/facter/facts.d',
+  Stdlib::Absolutepath $facts_dir = $::facter::facts_d_dir,
 ) {
 
   include ::facter

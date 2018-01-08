@@ -40,6 +40,9 @@ describe 'facter::fact' do
         :value => 'fact2value',
       }
     end
+    let(:pre_condition) do
+      'include facter'
+    end
 
     # Does not contain this file, because we are using the default which is
     # managed in the facter class.
@@ -50,6 +53,31 @@ describe 'facter::fact' do
         'name' => 'fact_line_fact2',
         'line' => 'fact2=fact2value',
         'path' => '/etc/facter/facts.d/facts.txt',
+      })
+    }
+  end
+
+  context 'with facts_d_dir overriden' do
+    let(:title) { 'fact3' }
+    let(:params) do
+      {
+        :fact => 'fact3',
+        :value => 'fact3value'
+      }
+    end
+    let(:pre_condition) do
+      "class {'facter':
+        facts_d_dir => '/etc/puppetlabs/facter/facts.d'
+      }"
+    end
+
+    it { should_not contain_file('facts_file_fact3') }
+
+    it {
+      should contain_file_line('fact_line_fact3').with({
+        'name' => 'fact_line_fact3',
+        'line' => 'fact3=fact3value',
+        'path' => '/etc/puppetlabs/facter/facts.d/facts.txt'
       })
     }
   end
