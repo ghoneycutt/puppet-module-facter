@@ -26,10 +26,10 @@ class facter::params(
     'windows': {
       $facts_d_dir            = 'C:/ProgramData/PuppetLabs/facter/facts.d'
       $path_to_facter         = 'C:/Program Files/Puppet Labs/Puppet/bin/facter.bat'
-      $facts_d_owner          = 'administrator'
-      $facts_d_group          = 'administrator'
-      $facts_file_owner       = 'administrator'
-      $facts_file_group       = 'administrator'
+      $facts_d_owner          = 'BUILTIN\Administrators'
+      $facts_d_group          = 'BUILTIN\Administrators'
+      $facts_file_owner       = 'BUILTIN\Administrators'
+      $facts_file_group       = 'BUILTIN\Administrators'
       $package_name           = 'facter'
     }
     default: {
