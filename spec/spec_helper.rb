@@ -3,6 +3,9 @@ RSpec.configure do |c|
 end
 
 require 'puppetlabs_spec_helper/module_spec_helper'
+require 'rspec-puppet-facts'
+
+include RspecPuppetFacts
 
 RSpec.configure do |config|
   config.hiera_config = 'spec/fixtures/hiera/hiera.yaml'
@@ -18,6 +21,5 @@ RSpec.configure do |config|
     :environment     => 'rp_env',
     :parameter_tests => 'fix_for_hiera_v2_with_puppet_v4.0-4.2',
     :fqdn            => 'hiera2.fix',
-    :puppetversion   => '3.8.0',
   }
 end

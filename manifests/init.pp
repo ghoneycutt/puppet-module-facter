@@ -29,11 +29,35 @@ class facter (
   Facter::Conf $facter_conf                     = {},
 ) {
 
+  if $facts['os']['family'] == 'windows' {
+    $facts_d_mode_real = undef
+    $facts_file_mode_real = undef
+    $facter_conf_dir_mode_real = undef
+    $facter_conf_mode_real = undef
+    $facts_file_path  = "${facts_d_dir}\\${facts_file}"
+    $facter_conf_path = "${facter_conf_dir}\\${facter_conf_name}"
+  } else {
+    $facts_d_mode_real = $facts_d_mode
+    $facts_file_mode_real = $facts_file_mode
+    $facter_conf_dir_mode_real = $facter_conf_dir_mode
+    $facter_conf_mode_real = $facter_conf_mode
+    $facts_file_path  = "${facts_d_dir}/${facts_file}"
+    $facter_conf_path = "${facter_conf_dir}/${facter_conf_name}"
+  }
+
   if $manage_facts_d_dir == true {
-    exec { "mkdir_p-${facts_d_dir}":
-      command => "mkdir -p ${facts_d_dir}",
-      unless  => "test -d ${facts_d_dir}",
-      path    => '/bin:/usr/bin',
+    if $facts['os']['family'] == 'windows' {
+      exec { "mkdir_p-${facts_d_dir}":
+        command => "cmd /c mkdir ${facts_d_dir}",
+        creates => $facts_d_dir,
+        path    => $::path,
+      }
+    } else {
+      exec { "mkdir_p-${facts_d_dir}":
+        command => "mkdir -p ${facts_d_dir}",
+        creates => $facts_d_dir,
+        path    => '/bin:/usr/bin',
+      }
     }
 
     file { 'facts_d_directory':
@@ -41,7 +65,7 @@ class facter (
       path    => $facts_d_dir,
       owner   => $facts_d_owner,
       group   => $facts_d_group,
-      mode    => $facts_d_mode,
+      mode    => $facts_d_mode_real,
       purge   => $purge_facts_d,
       recurse => $purge_facts_d,
       require => Exec["mkdir_p-${facts_d_dir}"],
@@ -59,10 +83,10 @@ class facter (
 
   file { 'facts_file':
     ensure => file,
-    path   => "${facts_d_dir}/${facts_file}",
+    path   => $facts_file_path,
     owner  => $facts_file_owner,
     group  => $facts_file_group,
-    mode   => $facts_file_mode,
+    mode   => $facts_file_mode_real,
   }
 
   if $facts_hash_hiera_merge == true {
@@ -79,27 +103,35 @@ class facter (
     create_resources('facter::fact',$facts_hash_real, $facts_defaults)
   }
 
-  exec { "mkdir_p-${facter_conf_dir}":
-    command => "mkdir -p ${facter_conf_dir}",
-    unless  => "test -d ${facter_conf_dir}",
-    path    => '/bin:/usr/bin',
+  if $facts['os']['family'] == 'windows' {
+    exec { "mkdir_p-${facter_conf_dir}":
+      command => "cmd /c mkdir ${facter_conf_dir}",
+      creates => $facter_conf_dir,
+      path    => $::path,
+    }
+  } else {
+    exec { "mkdir_p-${facter_conf_dir}":
+      command => "mkdir -p ${facter_conf_dir}",
+      creates => $facter_conf_dir,
+      path    => '/bin:/usr/bin',
+    }
   }
   file { $facter_conf_dir:
     ensure  => 'directory',
     owner   => $facter_conf_dir_owner,
     group   => $facter_conf_dir_group,
-    mode    => $facter_conf_dir_mode,
+    mode    => $facter_conf_dir_mode_real,
     require => Exec["mkdir_p-${facter_conf_dir}"],
   }
 
   if ! empty($facter_conf) {
     # Template uses:
     # - $facter_conf
-    file { "${facter_conf_dir}/${facter_conf_name}":
+    file { $facter_conf_path:
       ensure  => 'file',
       owner   => $facter_conf_owner,
       group   => $facter_conf_group,
-      mode    => $facter_conf_mode,
+      mode    => $facter_conf_mode_real,
       content => template('facter/facter.conf.erb'),
     }
   }

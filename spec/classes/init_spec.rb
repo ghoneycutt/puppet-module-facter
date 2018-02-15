@@ -1,11 +1,10 @@
 require 'spec_helper'
 describe 'facter' do
 
-  it { should compile.with_all_deps }
-
   context 'with default options' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
 
+    it { should compile.with_all_deps }
     it { should contain_class('facter') }
 
     it { should contain_file('facts_file').with({
@@ -33,14 +32,14 @@ describe 'facter' do
     it {
       should contain_exec('mkdir_p-/etc/facter/facts.d').with({
         'command' => 'mkdir -p /etc/facter/facts.d',
-        'unless'  => 'test -d /etc/facter/facts.d',
+        'creates' => '/etc/facter/facts.d',
       })
     }
 
     it {
       should contain_exec('mkdir_p-/etc/puppetlabs/facter').with({
         'command' => 'mkdir -p /etc/puppetlabs/facter',
-        'unless'  => 'test -d /etc/puppetlabs/facter',
+        'creates' => '/etc/puppetlabs/facter',
       })
     }
 
@@ -57,10 +56,73 @@ describe 'facter' do
     it { should_not contain_file('/etc/puppetlabs/facter/facter.conf') }
   end
 
+  on_supported_os({
+    :supported_os => [
+      {
+        "operatingsystem" => "windows",
+        "operatingsystemrelease" => ["2012 R2"],
+      }
+    ]
+  }).each do |os, facts|
+    context "on #{os}" do
+      let(:facts) { facts }
+      it { should compile.with_all_deps }
+      it { should contain_class('facter') }
+
+      it { should contain_file('facts_file').with({
+          'ensure'  => 'file',
+          'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d\facts.txt',
+          'owner'   => 'NT AUTHORITY\SYSTEM',
+          'group'   => 'NT AUTHORITY\SYSTEM',
+          'mode'    => nil,
+        })
+      }
+
+      it {
+        should contain_file('facts_d_directory').with({
+          'ensure'  => 'directory',
+          'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+          'owner'   => 'NT AUTHORITY\SYSTEM',
+          'group'   => 'NT AUTHORITY\SYSTEM',
+          'mode'    => nil,
+          'purge'   => false,
+          'recurse' => false,
+          'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d]',
+        })
+      }
+
+      it {
+        should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d').with({
+          'command' => 'cmd /c mkdir C:\ProgramData\PuppetLabs\facter\facts.d',
+          'creates' => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+        })
+      }
+
+      it {
+        should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\etc').with({
+          'command' => 'cmd /c mkdir C:\ProgramData\PuppetLabs\facter\etc',
+          'creates' => 'C:\ProgramData\PuppetLabs\facter\etc',
+        })
+      }
+
+      it {
+        should contain_file('C:\ProgramData\PuppetLabs\facter\etc').with({
+          'ensure'  => 'directory',
+          'owner'   => 'NT AUTHORITY\SYSTEM',
+          'group'   => 'NT AUTHORITY\SYSTEM',
+          'mode'    => nil,
+          'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\etc]',
+        })
+      }
+
+      it { should_not contain_file('C:\ProgramData\PuppetLabs\facter\etc\facter.conf') }
+    end
+  end
+
   describe 'with purge_facts_d' do
     context "set to true" do
       let(:params) { { :purge_facts_d => true } }
-      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:facts) { { :os => { :family => 'RedHat' } } }
 
       it {
         should contain_file('facts_d_directory').with({
@@ -77,7 +139,7 @@ describe 'facter' do
     end
     context "set to false" do
       let(:params) { { :purge_facts_d => false } }
-      let(:facts) { { :osfamily => 'RedHat' } }
+      let(:facts) { { :os => { :family => 'RedHat' } } }
 
       it {
         should contain_file('facts_d_directory').with({
@@ -100,7 +162,7 @@ describe 'facter' do
         :manage_facts_d_dir => false,
       }
     end
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
 
     it { should contain_class('facter') }
 
@@ -115,7 +177,7 @@ describe 'facter' do
         :manage_facts_d_dir => true,
       }
     end
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
 
     it { should contain_class('facter') }
 
@@ -133,13 +195,13 @@ describe 'facter' do
     it {
       should contain_exec('mkdir_p-/etc/facter/facts.d').with({
         'command' => 'mkdir -p /etc/facter/facts.d',
-        'unless'  => 'test -d /etc/facter/facts.d',
+        'creates' => '/etc/facter/facts.d',
       })
     }
   end
 
   context 'with facts specified as a hash on RedHat' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
     let(:params) do
       {
         :facts_hash => {
@@ -179,7 +241,7 @@ describe 'facter' do
   end
 
   context 'with facts specified as a hash with different file and facts_dir on RedHat' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
     let(:params) do
       {
         :facts_file => "file.txt",
@@ -250,7 +312,7 @@ describe 'facter' do
   end
 
   context 'with all options specified' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
     let(:params) do
       {
         :facts_d_dir      => '/etc/puppet/facter/facts.d',
@@ -290,7 +352,7 @@ describe 'facter' do
     it {
       should contain_exec('mkdir_p-/etc/puppet/facter/facts.d').with({
         'command' => 'mkdir -p /etc/puppet/facter/facts.d',
-        'unless'  => 'test -d /etc/puppet/facter/facts.d',
+        'creates' => '/etc/puppet/facter/facts.d',
       })
     }
 
@@ -312,7 +374,7 @@ describe 'facter' do
     it {
       should contain_exec('mkdir_p-/etc/puppetlabs/facter').with({
         'command' => 'mkdir -p /etc/puppetlabs/facter',
-        'unless'  => 'test -d /etc/puppetlabs/facter',
+        'creates' => '/etc/puppetlabs/facter',
       })
     }
 
@@ -346,7 +408,7 @@ describe 'facter' do
   end
 
   context 'with invalid facts_d_dir param' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
     let(:params) { { :facts_d_dir => 'invalid/path/statement' } }
 
     it do
@@ -357,7 +419,7 @@ describe 'facter' do
   end
 
   context 'with invalid facts_d_mode param' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
     let(:params) { { :facts_d_mode => '751' } }
 
     it do
@@ -391,7 +453,7 @@ describe 'facter' do
 
   describe 'with ensure_facter_symlink' do
     context "set to true (default)" do
-      let(:facts) { { :osfamily => 'Debian' } }
+      let(:facts) { { :os => { :family => 'Debian' } } }
       let(:params) { { :ensure_facter_symlink => true } }
 
       it {
@@ -404,14 +466,14 @@ describe 'facter' do
     end
 
     context "set to false (default)" do
-      let(:facts) { { :osfamily => 'Debian' } }
+      let(:facts) { { :os => { :family => 'Debian' } } }
       let(:params) { { :ensure_facter_symlink => false } }
 
       it { should_not contain_file('facter_symlink') }
     end
 
     context 'enabled with all params specified' do
-      let(:facts) { { :osfamily => 'Debian' } }
+      let(:facts) { { :os => { :family => 'Debian' } } }
       let(:params) do
         { :ensure_facter_symlink  => true,
           :path_to_facter         => '/foo/bar',
@@ -460,7 +522,7 @@ describe 'facter' do
   end
 
   context 'with invalid facts param' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
     let(:params) { { :facts_hash => ['array','is','invalid'] } }
 
     it do
@@ -471,7 +533,7 @@ describe 'facter' do
   end
 
   context 'with invalid fact_file param' do
-    let(:facts) { { :osfamily => 'RedHat' } }
+    let(:facts) { { :os => { :family => 'RedHat' } } }
     let(:params) { { :fact_file => ['array','is','invalid'] } }
 
     it do
@@ -484,14 +546,14 @@ describe 'facter' do
   describe 'with facter::facts_hash_hiera_merge' do
     let :facts do
       {
-        :osfamily        => 'RedHat',
+        :os => { :family => 'RedHat' },
         :fqdn            => 'hieramerge.example.local',
         :parameter_tests => 'facts_hash_hiera_merge',
       }
     end
 
     context 'set to valid value true' do
-      let(:params) { { :facts_hash_hiera_merge => 'true' } }
+      let(:params) { { :facts_hash_hiera_merge => true } }
 
       it { should have_facter__fact_resource_count(2) }
       it do
@@ -511,7 +573,7 @@ describe 'facter' do
     end
 
     context 'set to valid value false' do
-      let(:params) { { :facts_hash_hiera_merge => 'false' } }
+      let(:params) { { :facts_hash_hiera_merge => false } }
 
       it { should have_facter__fact_resource_count(1) }
       it do
@@ -530,18 +592,14 @@ describe 'facter' do
       it 'should fail' do
         expect {
           should contain_class('facter')
-        }.to raise_error(Puppet::Error,/str2bool\(\): Unknown type of boolean given/)
+        }.to raise_error(Puppet::Error,/expects a Boolean value/)
       end
     end
   end
 
   describe 'variable type and content validations' do
     # set needed custom facts and variables
-    let(:facts) do
-      {
-       :fqdn => 'hieramerge.example.local',
-      }
-    end
+    let(:facts) { { :os => { :family => 'RedHat' } } }
     let(:validation_params) do
       {
         #:param => 'value',

@@ -22,6 +22,7 @@ gem 'puppet-lint-unquoted_string-check', :require => false
 gem 'puppet-lint-variable_contains_upcase', :require => false
 
 gem 'rspec',     '~> 2.0', :require => false          if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
+gem 'rspec-puppet-facts', :require => false
 gem 'rake',      '~> 10.0', :require => false         if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
 gem 'json',      '<= 1.8', :require => false          if RUBY_VERSION < '2.0.0'
 gem 'json_pure', '<= 2.0.1', :require => false        if RUBY_VERSION < '2.0.0'

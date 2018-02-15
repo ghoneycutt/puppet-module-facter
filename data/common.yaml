@@ -1,0 +1,25 @@
+---
+facter::manage_facts_d_dir: true
+facter::purge_facts_d: false
+facter::facts_d_dir: /etc/facter/facts.d
+facter::facts_d_owner: root
+facter::facts_d_group: root
+facter::facts_d_mode: '0755'
+facter::path_to_facter: /opt/puppetlabs/bin/facter
+facter::path_to_facter_symlink: /usr/local/bin/facter
+facter::ensure_facter_symlink: false
+facter::facts_hash: {}
+facter::facts_hash_hiera_merge: false
+facter::facts_file: facts.txt
+facter::facts_file_owner: root
+facter::facts_file_group: root
+facter::facts_file_mode: '0644'
+facter::facter_conf_dir: /etc/puppetlabs/facter
+facter::facter_conf_dir_owner: root
+facter::facter_conf_dir_group: root
+facter::facter_conf_dir_mode: '0755'
+facter::facter_conf_name: facter.conf
+facter::facter_conf_owner: root
+facter::facter_conf_group: root
+facter::facter_conf_mode: '0644'
+facter::facter_conf: {}
