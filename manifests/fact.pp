@@ -11,7 +11,7 @@ define facter::fact (
 
   include ::facter
 
-  $match = "^${name}=\\S*$"
+  $match = "^${name}=\\S.*$"
 
   if $file != $facter::facts_file {
     file { "facts_file_${name}":

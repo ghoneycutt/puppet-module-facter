@@ -27,7 +27,7 @@ describe 'facter::fact' do
         'name' => 'fact_line_fact1',
         'path' => '/factsdir/custom.txt',
         'line' => 'fact1=fact1value',
-        'match' => '^fact1=\S*$',
+        'match' => '^fact1=\S.*$',
       })
     }
   end
