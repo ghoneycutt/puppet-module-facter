@@ -10,9 +10,9 @@ Puppet module to manage Facter. To use simply `include ::facter`.
 # Compatibility
 ---------------
 This module is built for use with Puppet v3 (with and without the future
-parse), v4 and v5 and supports Ruby versions 1.8.7, 1.9.3, 2.0.0, 2.1.9
-and 2.4.1 on all POSIX like platforms. See `.travis.yml` for an exact
-matrix of tested Ruby and Puppet versions.
+parse), v4, v5 and v6 and supports the ruby versions associated with
+those releases on all POSIX like platforms. See `.travis.yml` for an
+exact matrix of tested Ruby and Puppet versions.
 
 ===
 
