@@ -687,7 +687,7 @@ describe 'facter' do
       it 'should fail' do
         expect {
           should contain_class('facter')
-        }.to raise_error(Puppet::Error,/str2bool\(\): Unknown type of boolean given at/)
+        }.to raise_error(Puppet::Error,/str2bool\(\): Unknown type of boolean given/)
       end
     end
   end
