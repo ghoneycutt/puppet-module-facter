@@ -1,3 +1,6 @@
+### v3.5.0 - 2019-01-03
+  Support Puppet v6
+
 ### v3.4.0 - 2017-11-01
   Support Puppet v5
 
