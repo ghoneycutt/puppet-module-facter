@@ -31,6 +31,33 @@ describe 'facter::fact' do
         'match' => '^fact1=\S*$',
       })
     }
+
+    context 'when facter::purge_facts => true' do
+      let(:pre_condition) do
+        "class { 'facter': purge_facts => true }"
+      end
+
+      it { should_not contain_file('facts_file_fact1') }
+      it { should_not contain_file_line('fact_line_fact1') }
+      it {
+        should contain_concat('facts_file_fact1').with({
+          'ensure'          => 'present',
+          'path'            => '/factsdir/custom.txt',
+          'owner'           => 'root',
+          'group'           => 'root',
+          'mode'            => '0644',
+          'ensure_newline'  => 'true',
+          'require'         => 'File[facts_d_directory]',
+        })
+      }
+
+      it {
+        should contain_concat__fragment('fact_line_fact1').with({
+          'target'  => '/factsdir/custom.txt',
+          'content' => 'fact1=fact1value',
+        })
+      }
+    end
   end
 
   context 'with fact specified ' do

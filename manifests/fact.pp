@@ -22,18 +22,37 @@ define facter::fact (
   $match = "^${name}=\\S*$"
 
   if $file != $facter::facts_file {
-    file { "facts_file_${name}":
-      ensure => file,
-      path   => $facts_file_path,
-      owner  => $facter::facts_file_owner,
-      group  => $facter::facts_file_group,
-      mode   => $facter::facts_file_mode,
+    if $::facter::purge_facts {
+      concat { "facts_file_${name}":
+        ensure         => 'present',
+        path           => "${facts_dir}/${file}",
+        owner          => $facter::facts_file_owner,
+        group          => $facter::facts_file_group,
+        mode           => $facter::facts_file_mode,
+        ensure_newline => true,
+        require        => File['facts_d_directory'],
+      }
+    } else {
+      file { "facts_file_${name}":
+        ensure => file,
+        path   => $facts_file_path,
+        owner  => $facter::facts_file_owner,
+        group  => $facter::facts_file_group,
+        mode   => $facter::facts_file_mode,
+      }
     }
   }
 
-  file_line { "fact_line_${name}":
-    path  => $facts_file_path,
-    line  => "${name}=${value}",
-    match => $match,
+  if $::facter::purge_facts {
+    concat::fragment { "fact_line_${name}":
+      target  => "${facts_dir}/${file}",
+      content => "${name}=${value}",
+    }
+  } else {
+    file_line { "fact_line_${name}":
+      path  => $facts_file_path,
+      line  => "${name}=${value}",
+      match => $match,
+    }
   }
 }

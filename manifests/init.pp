@@ -18,6 +18,7 @@ class facter (
   String $facts_file_owner                      = 'root',
   String $facts_file_group                      = 'root',
   Stdlib::Filemode $facts_file_mode             = '0644',
+  Boolean $purge_facts                          = false,
   Stdlib::Absolutepath $facter_conf_dir         = '/etc/puppetlabs/facter',
   String $facter_conf_dir_owner                 = 'root',
   String $facter_conf_dir_group                 = 'root',
@@ -81,12 +82,24 @@ class facter (
     }
   }
 
-  file { 'facts_file':
-    ensure => file,
-    path   => $facts_file_path,
-    owner  => $facts_file_owner,
-    group  => $facts_file_group,
-    mode   => $facts_file_mode_real,
+  if $purge_facts {
+    concat { 'facts_file':
+      ensure         => 'present',
+      path           => "${facts_d_dir}/${facts_file}",
+      owner          => $facts_file_owner,
+      group          => $facts_file_group,
+      mode           => $facts_file_mode,
+      ensure_newline => true,
+      require        => File['facts_d_directory'],
+    }
+  } else {
+    file { 'facts_file':
+      ensure => file,
+      path   => $facts_file_path,
+      owner  => $facts_file_owner,
+      group  => $facts_file_group,
+      mode   => $facts_file_mode_real,
+    }
   }
 
   if $facts_hash_hiera_merge == true {

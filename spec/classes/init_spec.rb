@@ -16,6 +16,8 @@ describe 'facter' do
       })
     }
 
+    it { should_not contain_concat('facts_file') }
+
     it {
       should contain_file('facts_d_directory').with({
         'ensure'  => 'directory',
@@ -54,6 +56,23 @@ describe 'facter' do
     }
 
     it { should_not contain_file('/etc/puppetlabs/facter/facter.conf') }
+  end
+
+  context 'with purge_facts => true' do
+    let(:facts) { { :os => { :family => 'RedHat' } } }
+    let(:params) {{ :purge_facts => true }}
+
+    it { should_not contain_file('facts_file') }
+    it { should contain_concat('facts_file').with({
+        'ensure'          => 'present',
+        'path'            => '/etc/facter/facts.d/facts.txt',
+        'owner'           => 'root',
+        'group'           => 'root',
+        'mode'            => '0644',
+        'ensure_newline'  => 'true',
+        'require'         => 'File[facts_d_directory]',
+      })
+    }
   end
 
   on_supported_os({
