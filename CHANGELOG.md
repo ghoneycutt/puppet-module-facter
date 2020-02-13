@@ -1,3 +1,6 @@
+## Development
+  Support Windows and convert default parameters to module data.
+
 ### v3.5.0 - 2019-01-03
   Support Puppet v6
 
