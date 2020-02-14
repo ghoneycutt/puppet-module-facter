@@ -451,7 +451,9 @@ describe 'facter' do
     }
     on_supported_os(windows).each do |os, os_facts|
       let(:facts) do
-        os_facts
+        os_facts.merge({
+          path: 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;C:\Program Files\Puppet Labs\Puppet\bin',
+        })
       end
       context 'with default options' do
         it { should compile.with_all_deps }
@@ -481,7 +483,7 @@ describe 'facter' do
           should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d').with({
             'command' => 'cmd /c mkdir C:\ProgramData\PuppetLabs\facter\facts.d',
             'creates' => 'C:\ProgramData\PuppetLabs\facter\facts.d',
-            'path'    => "C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin;C:\\Program Files\\Puppet Labs\\Puppet\\bin;C:\\cygwin64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0;C:\\Packer\\SysInternals;C:\\Program Files\\Git\\cmd;C:\\Program Files\\PowerShell\\6;C:\\Users\\cyg_server\\AppData\\Local\\Microsoft\\WindowsApps",
+            'path'    => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;C:\Program Files\Puppet Labs\Puppet\bin',
           })
         }
       end
@@ -540,7 +542,7 @@ describe 'facter' do
           should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d').with({
             'command' => 'cmd /c mkdir C:\ProgramData\PuppetLabs\facter\facts.d',
             'creates' => 'C:\ProgramData\PuppetLabs\facter\facts.d',
-            'path'    => "C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin;C:\\Program Files\\Puppet Labs\\Puppet\\bin;C:\\cygwin64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0;C:\\Packer\\SysInternals;C:\\Program Files\\Git\\cmd;C:\\Program Files\\PowerShell\\6;C:\\Users\\cyg_server\\AppData\\Local\\Microsoft\\WindowsApps",
+            'path'    => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;C:\Program Files\Puppet Labs\Puppet\bin',
           })
         }
       end
@@ -579,7 +581,7 @@ describe 'facter' do
           should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d').with({
             'command' => 'cmd /c mkdir C:\ProgramData\PuppetLabs\facter\facts.d',
             'creates' => 'C:\ProgramData\PuppetLabs\facter\facts.d',
-            'path'    => "C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin;C:\\Program Files\\Puppet Labs\\Puppet\\bin;C:\\cygwin64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0;C:\\Packer\\SysInternals;C:\\Program Files\\Git\\cmd;C:\\Program Files\\PowerShell\\6;C:\\Users\\cyg_server\\AppData\\Local\\Microsoft\\WindowsApps",
+            'path'    => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;C:\Program Files\Puppet Labs\Puppet\bin',
           })
         }
     
