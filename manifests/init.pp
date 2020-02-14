@@ -21,8 +21,12 @@ class facter (
 ) {
   if $facts['os']['family'] == 'windows' {
     $facts_file_path  = "${facts_d_dir}\\${facts_file}"
+    $facts_d_mode_real = undef
+    $facts_file_mode_real = undef
   } else {
     $facts_file_path  = "${facts_d_dir}/${facts_file}"
+    $facts_d_mode_real = $facts_d_mode
+    $facts_file_mode_real = $facts_file_mode
   }
 
   if $manage_facts_d_dir == true {
@@ -45,7 +49,7 @@ class facter (
       path    => $facts_d_dir,
       owner   => $facts_d_owner,
       group   => $facts_d_group,
-      mode    => $facts_d_mode,
+      mode    => $facts_d_mode_real,
       purge   => $purge_facts_d,
       recurse => $purge_facts_d,
       require => Exec["mkdir_p-${facts_d_dir}"],
@@ -66,7 +70,7 @@ class facter (
     path   => $facts_file_path,
     owner  => $facts_file_owner,
     group  => $facts_file_group,
-    mode   => $facts_file_mode,
+    mode   => $facts_file_mode_real,
   }
 
   # optionally push fact to client

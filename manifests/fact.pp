@@ -5,22 +5,22 @@
 define facter::fact (
   $value,
   String[1] $fact = $name,
-  String[1] $file = 'facts.txt',
-  Stdlib::Absolutepath $facts_dir = '/etc/facter/facts.d',
+  Optional[String[1]] $file = undef,
+  Optional[Stdlib::Absolutepath] $facts_dir = undef,
 ) {
   include facter
 
   $facts_file = pick($file, $facter::facts_file)
   $facts_dir_path = pick($facts_dir, $facter::facts_d_dir)
   if $facts['os']['family'] == 'windows' {
-    $facts_file_path = "${facts_dir_path}\\${file}"
+    $facts_file_path = "${facts_dir_path}\\${facts_file}"
   } else {
-    $facts_file_path = "${facts_dir_path}/${file}"
+    $facts_file_path = "${facts_dir_path}/${facts_file}"
   }
 
   $match = "^${name}=\\S*$"
 
-  if $file != $facter::facts_file {
+  if $facts_file != $facter::facts_file {
     file { "facts_file_${name}":
       ensure => file,
       path   => $facts_file_path,

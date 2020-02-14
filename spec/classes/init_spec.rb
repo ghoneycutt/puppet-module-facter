@@ -464,6 +464,7 @@ describe 'facter' do
             'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d\facts.txt',
             'owner'   => 'NT AUTHORITY\SYSTEM',
             'group'   => 'NT AUTHORITY\SYSTEM',
+            'mode'    => nil,
           })
         }
     
@@ -475,6 +476,7 @@ describe 'facter' do
             'group'   => 'NT AUTHORITY\SYSTEM',
             'purge'   => false,
             'recurse' => false,
+            'mode'    => nil,
             'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d]',
           })
         }
@@ -499,6 +501,7 @@ describe 'facter' do
                 'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d',
                 'owner'   => 'NT AUTHORITY\SYSTEM',
                 'group'   => 'NT AUTHORITY\SYSTEM',
+                'mode'    => nil,
                 'purge'   => value,
                 'recurse' => value,
                 'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d]',
@@ -533,7 +536,7 @@ describe 'facter' do
             'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d',
             'owner'   => 'NT AUTHORITY\SYSTEM',
             'group'   => 'NT AUTHORITY\SYSTEM',
-            'mode'    => '0755',
+            'mode'    => nil,
             'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d]',
           })
         }
@@ -573,6 +576,7 @@ describe 'facter' do
             'group'   => 'puppet',
             'purge'   => false,
             'recurse' => false,
+            'mode'    => nil,
             'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d]',
           })
         }
@@ -590,6 +594,7 @@ describe 'facter' do
             'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d\file.txt',
             'owner'   => 'puppet',
             'group'   => 'puppet',
+            'mode'    => nil,
           })
         }
     
