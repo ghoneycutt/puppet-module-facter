@@ -9,7 +9,7 @@ class facter (
   String[1] $facts_d_owner = 'root',
   String[1] $facts_d_group = 'root',
   Optional[Stdlib::Filemode] $facts_d_mode = '0755',
-  Stdlib::Absolutepath $path_to_facter = '/usr/bin/facter',
+  Stdlib::Absolutepath $path_to_facter = '/opt/puppetlabs/bin/facter',
   Stdlib::Absolutepath $path_to_facter_symlink = '/usr/local/bin/facter',
   Boolean $ensure_facter_symlink = false,
   Hash $facts_hash = {},
@@ -71,7 +71,7 @@ class facter (
 
   # optionally push fact to client
   if $facts_hash_hiera_merge == true {
-    $facts_hash_real = lookup('facter::facts_hash', Hash) |$key| { {} }
+    $facts_hash_real = lookup('facter::facts_hash', Hash, 'hash', {})
   } else {
     $facts_hash_real = $facts_hash
   }
