@@ -24,3 +24,5 @@ RSpec.configure do |config|
     :puppetversion   => '3.8.0',
   }
 end
+
+RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = 99_999

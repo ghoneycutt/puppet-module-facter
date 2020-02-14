@@ -1,4 +1,5 @@
 require 'spec_helper'
+
 describe 'facter' do
   context 'on RedHat' do
     redhat = {
@@ -66,15 +67,6 @@ describe 'facter' do
                 'require' => 'Exec[mkdir_p-/etc/facter/facts.d]',
               })
             }
-          end
-        end
-        context 'set to an invalid type' do
-          let(:params) { { :purge_facts_d => ['invalid', 'type'] } }
-    
-          it do
-            expect {
-              should contain_class('facter')
-            }.to raise_error(Puppet::Error,/expects a Boolean value, got Tuple/)
           end
         end
       end
@@ -283,87 +275,7 @@ describe 'facter' do
           })
         }
       end
-        
-      context 'with invalid facts_d_dir param' do
-        let(:params) { { :facts_d_dir => 'invalid/path/statement' } }
-    
-        it do
-          expect {
-            should contain_class('facter')
-          }.to raise_error(Puppet::Error)
-        end
-      end
-    
-      context 'with invalid facts_d_mode param' do
-        let(:params) { { :facts_d_mode => '751' } }
-    
-        it do
-          expect {
-            should contain_class('facter')
-          }.to raise_error(Puppet::Error, /Stdlib::Filemode/)
-        end
-      end
-
-      context 'with invalid manage_facts_d_dir param' do
-        let(:params) { { :manage_facts_d_dir => ['array','is','invalid'] } }
-    
-        it do
-          expect {
-            should contain_class('facter')
-          }.to raise_error(Puppet::Error, /expects a Boolean value, got Tuple/)
-        end
-      end
-        
-      describe 'with invalid path for' do
-        context 'path_to_facter' do
-          let(:params) do
-            {
-              :path_to_facter => 'invalid/path',
-            }
-          end
-    
-          it do
-            expect {
-              should contain_class('facter')
-            }.to raise_error(Puppet::Error)
-          end
-        end
-    
-        context 'path_to_facter_symlink' do
-          let(:params) do
-            {
-              :path_to_facter_symlink => 'invalid/path',
-            }
-          end
-    
-          it do
-            expect {
-              should contain_class('facter')
-            }.to raise_error(Puppet::Error)
-          end
-        end
-      end
-    
-      context 'with invalid facts param' do
-        let(:params) { { :facts_hash => ['array','is','invalid'] } }
-    
-        it do
-          expect {
-            should contain_class('facter')
-          }.to raise_error(Puppet::Error)
-        end
-      end
-    
-      context 'with invalid fact_file param' do
-        let(:params) { { :fact_file => ['array','is','invalid'] } }
-    
-        it do
-          expect {
-            should contain_class('facter')
-          }.to raise_error(Puppet::Error)
-        end
-      end
-    
+            
       describe 'with facter::facts_hash_hiera_merge' do
         let :facts do
           os_facts.merge({
@@ -375,7 +287,7 @@ describe 'facter' do
         context 'set to valid value true' do
           let(:params) { { :facts_hash_hiera_merge => true } }
     
-          #it { should have_facter__fact_resource_count(2) }
+          it { should have_facter__fact_resource_count(2) }
           it do
             should contain_facter__fact('role').with({
               'file'      => 'facts.txt',
@@ -405,16 +317,6 @@ describe 'facter' do
           end
           it { should_not contain_facter__fact('location') }
         end
-    
-        context 'set to invalid value <invalid>' do
-          let(:params) { { :facts_hash_hiera_merge => 'invalid' } }
-    
-          it 'should fail' do
-            expect {
-              should contain_class('facter')
-            }.to raise_error(Puppet::Error,/expects a Boolean value, got String/)
-          end
-        end
       end
     
       describe 'variable type and content validations' do
@@ -431,11 +333,29 @@ describe 'facter' do
         end
     
         validations = {
-          'bool_stringified' => {
-            :name    => %w(facts_hash_hiera_merge),
-            :valid   => [true, false],
+          'Boolean' => {
+            :name    => %w(manage_facts_d_dir purge_facts_d ensure_facter_symlink facts_hash_hiera_merge),
+            :valid   => [true, false], 
             :invalid => ['invalid', 3, 2.42, %w(array), { 'ha' => 'sh' }, nil],
-            :message => '(expects a Boolean value, got|Unknown type of boolean)',
+            :message => 'expects a Boolean value, got',
+          },
+          'Stdlib::Absolutepath' => {
+            :name    => %w(facts_d_dir path_to_facter path_to_facter_symlink),
+            :valid   => ['/absolute/filepath', '/absolute/directory/'],
+            :invalid => ['../invalid', '', %w(array), { 'ha' => 'sh' }, 3, 2.42, true, false, nil],
+            :message => 'expects a Stdlib::Absolutepath',
+          },
+          'String[1]' => {
+            :name    => %w(facts_d_owner facts_d_group facts_file facts_file_owner facts_file_group),
+            :valid   => ['string'],
+            :invalid => ['', %w(array), { 'ha' => 'sh' }, 3, 2.42, true, false],
+            :message => '(expects a String value, got|expects a String\[1\] value, got)',
+          },
+          'Optional[Stdlib::Filemode]' => {
+            :name    => %w(facts_d_mode facts_file_mode),
+            :valid   => ['0777', :undef],
+            :invalid => ['8888', 'invalid', 3, 2.42, %w(array), { 'ha' => 'sh' }, true, false],
+            :message => '(expects a match for Stdlib::Filemode)',
           },
         }
     
@@ -519,4 +439,164 @@ describe 'facter' do
       end # describe 'with ensure_facter_symlink'
     end # on_support_os(debian)
   end # context 'on Debian'
-end
+
+  context 'on Windows' do
+    windows = {
+      supported_os: [
+        {
+          'operatingsystem'        => 'windows',
+          'operatingsystemrelease' => ['2016'],
+        },
+      ],
+    }
+    on_supported_os(windows).each do |os, os_facts|
+      let(:facts) do
+        os_facts
+      end
+      context 'with default options' do
+        it { should compile.with_all_deps }
+        it { should contain_class('facter') }
+
+        it { should contain_file('facts_file').with({
+            'ensure'  => 'file',
+            'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d\facts.txt',
+            'owner'   => 'NT AUTHORITY\SYSTEM',
+            'group'   => 'NT AUTHORITY\SYSTEM',
+          })
+        }
+    
+        it {
+          should contain_file('facts_d_directory').with({
+            'ensure'  => 'directory',
+            'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+            'owner'   => 'NT AUTHORITY\SYSTEM',
+            'group'   => 'NT AUTHORITY\SYSTEM',
+            'purge'   => false,
+            'recurse' => false,
+            'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d]',
+          })
+        }
+    
+        it {
+          should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d').with({
+            'command' => 'cmd /c mkdir C:\ProgramData\PuppetLabs\facter\facts.d',
+            'creates' => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+            'path'    => "C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin;C:\\Program Files\\Puppet Labs\\Puppet\\bin;C:\\cygwin64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0;C:\\Packer\\SysInternals;C:\\Program Files\\Git\\cmd;C:\\Program Files\\PowerShell\\6;C:\\Users\\cyg_server\\AppData\\Local\\Microsoft\\WindowsApps",
+          })
+        }
+      end
+    
+      describe 'with purge_facts_d' do
+        [true, false].each do |value|
+          context "set to #{value}" do
+            let(:params) { { :purge_facts_d => value } }
+    
+            it {
+              should contain_file('facts_d_directory').with({
+                'ensure'  => 'directory',
+                'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+                'owner'   => 'NT AUTHORITY\SYSTEM',
+                'group'   => 'NT AUTHORITY\SYSTEM',
+                'purge'   => value,
+                'recurse' => value,
+                'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d]',
+              })
+            }
+          end
+        end
+      end
+    
+      describe 'the package should not be managed' do
+        it { should_not contain_package('facter') }
+      end
+    
+      context 'with default options with manage_facts_d_dir = false' do
+        let(:params) { { :manage_facts_d_dir => false } }
+    
+        it { should contain_class('facter') }
+    
+        it { should_not contain_file('facts_d_directory') }
+    
+        it { should_not contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d') }
+      end
+    
+      context 'with default options with manage_facts_d_dir = true' do
+        let(:params) { { :manage_facts_d_dir => true } }
+    
+        it { should contain_class('facter') }
+    
+        it {
+          should contain_file('facts_d_directory').with({
+            'ensure'  => 'directory',
+            'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+            'owner'   => 'NT AUTHORITY\SYSTEM',
+            'group'   => 'NT AUTHORITY\SYSTEM',
+            'mode'    => '0755',
+            'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d]',
+          })
+        }
+    
+        it {
+          should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d').with({
+            'command' => 'cmd /c mkdir C:\ProgramData\PuppetLabs\facter\facts.d',
+            'creates' => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+            'path'    => "C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin;C:\\Program Files\\Puppet Labs\\Puppet\\bin;C:\\cygwin64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0;C:\\Packer\\SysInternals;C:\\Program Files\\Git\\cmd;C:\\Program Files\\PowerShell\\6;C:\\Users\\cyg_server\\AppData\\Local\\Microsoft\\WindowsApps",
+          })
+        }
+      end
+
+      context 'with all options specified' do
+        let(:params) do
+          {
+            :facts_d_dir      => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+            :facts_d_owner    => 'puppet',
+            :facts_d_group    => 'puppet',
+            :facts_file       => 'file.txt',
+            :facts_file_owner => 'puppet',
+            :facts_file_group => 'puppet',
+            :facts_hash => {
+              'fact' => {
+                'value' => 'value',
+              },
+            }
+          }
+        end
+    
+        it { should contain_class('facter') }
+        it {
+          should contain_file('facts_d_directory').with({
+            'ensure'  => 'directory',
+            'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+            'owner'   => 'puppet',
+            'group'   => 'puppet',
+            'purge'   => false,
+            'recurse' => false,
+            'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d]',
+          })
+        }
+    
+        it {
+          should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d').with({
+            'command' => 'cmd /c mkdir C:\ProgramData\PuppetLabs\facter\facts.d',
+            'creates' => 'C:\ProgramData\PuppetLabs\facter\facts.d',
+            'path'    => "C:\\Program Files\\Puppet Labs\\Puppet\\puppet\\bin;C:\\Program Files\\Puppet Labs\\Puppet\\bin;C:\\cygwin64\\bin;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0;C:\\Packer\\SysInternals;C:\\Program Files\\Git\\cmd;C:\\Program Files\\PowerShell\\6;C:\\Users\\cyg_server\\AppData\\Local\\Microsoft\\WindowsApps",
+          })
+        }
+    
+        it { should contain_file('facts_file').with({
+            'ensure'  => 'file',
+            'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d\file.txt',
+            'owner'   => 'puppet',
+            'group'   => 'puppet',
+          })
+        }
+    
+        it {
+          should contain_file_line('fact_line_fact').with({
+            'line' => 'fact=value',
+          })
+        }
+      end # context 'with all options specified'
+    end # on_support_os(windows)
+  end # context 'on windows'  
+end # describe 'facter'
