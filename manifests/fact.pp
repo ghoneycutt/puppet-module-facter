@@ -4,9 +4,9 @@
 #
 define facter::fact (
   $value,
-  String                         $fact      = $name,
-  Optional[String]               $file      = undef,
-  Optional[Stdlib::Absolutepath] $facts_dir = undef,
+  String[1] $fact = $name,
+  String[1] $file = 'facts.txt'
+  Stdlib::Absolutepath $facts_dir = '/etc/facter/facts.d',
 ) {
   include facter
 

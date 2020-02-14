@@ -3,21 +3,21 @@
 # Manage facter
 #
 class facter (
-  Boolean                    $manage_facts_d_dir     = true,
-  Boolean                    $purge_facts_d          = false,
-  Stdlib::Absolutepath       $facts_d_dir            = '/etc/facter/facts.d',
-  String                     $facts_d_owner          = 'root',
-  String                     $facts_d_group          = 'root',
-  Optional[Stdlib::Filemode] $facts_d_mode           = '0755',
-  Stdlib::Absolutepath       $path_to_facter         = '/usr/bin/facter',
-  Stdlib::Absolutepath       $path_to_facter_symlink = '/usr/local/bin/facter',
-  Boolean                    $ensure_facter_symlink  = false,
-  Hash                       $facts_hash             = {},
-  Boolean                    $facts_hash_hiera_merge = false,
-  String                     $facts_file             = 'facts.txt',
-  String                     $facts_file_owner       = 'root',
-  String                     $facts_file_group       = 'root',
-  Optional[Stdlib::Filemode] $facts_file_mode        = '0644',
+  Boolean $manage_facts_d_dir = true,
+  Boolean $purge_facts_d = false,
+  Stdlib::Absolutepath $facts_d_dir = '/etc/facter/facts.d',
+  String[1] $facts_d_owner = 'root',
+  String[1] $facts_d_group = 'root',
+  Optional[Stdlib::Filemode] $facts_d_mode = '0755',
+  Stdlib::Absolutepath $path_to_facter = '/usr/bin/facter',
+  Stdlib::Absolutepath $path_to_facter_symlink = '/usr/local/bin/facter',
+  Boolean $ensure_facter_symlink = false,
+  Hash $facts_hash = {},
+  Boolean $facts_hash_hiera_merge = false,
+  String[1] $facts_file = 'facts.txt',
+  String[1] $facts_file_owner = 'root',
+  String[1] $facts_file_group = 'root',
+  Optional[Stdlib::Filemode] $facts_file_mode = '0644',
 ) {
   if $facts['os']['family'] == 'windows' {
     $facts_file_path  = "${facts_d_dir}\\${facts_file}"
