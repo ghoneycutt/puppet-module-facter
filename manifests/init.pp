@@ -21,10 +21,8 @@ class facter (
 ) {
   if $facts['os']['family'] == 'windows' {
     $facts_file_path  = "${facts_d_dir}\\${facts_file}"
-    $facter_conf_path = "${facter_conf_dir}\\${facter_conf_name}"
   } else {
     $facts_file_path  = "${facts_d_dir}/${facts_file}"
-    $facter_conf_path = "${facter_conf_dir}/${facter_conf_name}"
   }
 
   if $manage_facts_d_dir == true {
