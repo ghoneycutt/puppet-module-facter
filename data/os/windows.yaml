@@ -1,0 +1,9 @@
+---
+facter::facts_d_dir: 'C:\ProgramData\PuppetLabs\facter\facts.d'
+facter::facts_d_owner: 'NT AUTHORITY\SYSTEM'
+facter::facts_d_group: 'NT AUTHORITY\SYSTEM'
+facter::facts_d_mode: null
+facter::path_to_facter: 'C:\Program Files\Puppet Labs\Puppet\bin\facter.bat'
+facter::facts_file_owner: 'NT AUTHORITY\SYSTEM'
+facter::facts_file_group: 'NT AUTHORITY\SYSTEM'
+facter::facts_file_mode: null

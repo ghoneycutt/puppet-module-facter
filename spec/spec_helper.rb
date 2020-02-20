@@ -3,6 +3,9 @@ RSpec.configure do |c|
 end
 
 require 'puppetlabs_spec_helper/module_spec_helper'
+require 'rspec-puppet-facts'
+
+include RspecPuppetFacts
 
 RSpec.configure do |config|
   config.hiera_config = 'spec/fixtures/hiera/hiera.yaml'
@@ -21,3 +24,5 @@ RSpec.configure do |config|
     :puppetversion   => '3.8.0',
   }
 end
+
+RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = 99_999

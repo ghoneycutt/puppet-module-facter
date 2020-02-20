@@ -1,1 +1,1 @@
-include ::facter
+include facter
