@@ -1,13 +1,26 @@
-# Class facter::fact
+# @summary Define txt based external facts
 #
-# Manage txt based external facts.
+# @param value
+#   Value of the fact.
+#
+# @param fact
+#   Name of the fact
+#
+# @param file
+#   File in which the fact will be placed. If not specified, use the default
+#   facts file.
+#
+# @param facts_dir
+#   Directory in which the file will be placed. If not specified, use the
+#   default facts_d_dir.
 #
 define facter::fact (
-  $value,
+  String[1] $value,
   String[1] $fact = $name,
   Optional[String[1]] $file = undef,
   Optional[Stdlib::Absolutepath] $facts_dir = undef,
 ) {
+
   include facter
 
   $facts_file = pick($file, $facter::facts_file)
