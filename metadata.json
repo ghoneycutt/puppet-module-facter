@@ -3,17 +3,15 @@
   "version": "3.5.0",
   "author": "ghoneycutt",
   "summary": "Manage Facter",
-  "description": "Manage Facter and optionally ensure facts.d directory.",
   "license": "Apache-2.0",
   "source": "git://github.com/ghoneycutt/puppet-module-facter.git",
   "project_page": "https://github.com/ghoneycutt/puppet-module-facter",
   "issues_url": "https://github.com/ghoneycutt/puppet-module-facter/issues",
-  "description": "Manage Facter and optionally ensure facts.d directory.",
-  "requirements": [
-    {"name":"puppet","version_requirement":">= 5.8.0 < 7.0.0"}
-  ],
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 4.22.0 < 7.0.0"}
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.22.0 < 7.0.0"
+    }
   ],
   "operatingsystem_support": [
     {
@@ -49,5 +47,15 @@
     {
       "operatingsystem": "windows"
     }
-  ]
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 5.8.0 < 7.0.0"
+    }
+  ],
+  "description": "Manage Facter and optionally ensure facts.d directory.",
+  "pdk-version": "1.17.0",
+  "template-url": "pdk-default#1.17.0",
+  "template-ref": "tags/1.17.0-0-gd3a4319"
 }
