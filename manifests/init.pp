@@ -33,6 +33,9 @@
 # @param facts_hash
 #   A hash of `facter::fact` entries.
 #
+# @param structured_data_facts_hash
+#   A hash of `facter::structured_data_fact` entries.
+#
 # @param facts_file
 #   The file in which the text based external facts are stored. This file must
 #   end with '.txt'.
@@ -57,6 +60,7 @@ class facter (
   Stdlib::Absolutepath $path_to_facter_symlink = '/usr/local/bin/facter',
   Boolean $ensure_facter_symlink = false,
   Hash $facts_hash = {},
+  Hash $structured_data_facts_hash = {},
   Pattern[/\.txt*\Z/] $facts_file = 'facts.txt',
   String[1] $facts_file_owner = 'root',
   String[1] $facts_file_group = 'root',
@@ -123,6 +127,12 @@ class facter (
 
   $facts_hash.each |$k, $v| {
     facter::fact { $k:
+      * => $v,
+    }
+  }
+
+  $structured_data_facts_hash.each |$k, $v| {
+    facter::structured_data_fact { $k:
       * => $v,
     }
   }

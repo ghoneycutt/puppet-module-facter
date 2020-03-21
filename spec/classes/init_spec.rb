@@ -153,6 +153,75 @@ describe 'facter' do
         it { should contain_exec('mkdir_p-/etc/facter/facts.d') }
       end
 
+      context 'with structured_data_facts_hash specified' do
+        let(:params) do
+          {
+            :structured_data_facts_hash => {
+              'foo' => {
+                'data' => {
+                  'my_array' => ['one', 'two', 'three'],
+                  'my_hash' => { 'k' => 'v' },
+                },
+              },
+              'bar' => {
+                'data' => {
+                  'bar_array' => ['one', 'two', 'three'],
+                },
+                'file' => 'bar.yaml',
+                'facts_dir' => '/factsdir',
+              },
+            }
+          }
+        end
+
+        foo_content = <<-END.gsub(/^\s+\|/, '')
+          |# This file is being maintained by Puppet.
+          |# DO NOT EDIT
+          |---
+          |my_array:
+          |- one
+          |- two
+          |- three
+          |my_hash:
+          |  k: v
+        END
+
+        bar_content = <<-END.gsub(/^\s+\|/, '')
+          |# This file is being maintained by Puppet.
+          |# DO NOT EDIT
+          |---
+          |bar_array:
+          |- one
+          |- two
+          |- three
+        END
+
+        it { should contain_facter__structured_data_fact('foo') }
+        it { should contain_facter__structured_data_fact('bar') }
+
+        it {
+          should contain_file('structured_data_fact_facts.yaml').with({
+            'ensure'  => 'file',
+            'path'    => '/etc/facter/facts.d/facts.yaml',
+            'content' => foo_content,
+            'owner'   => 'root',
+            'group'   => 'root',
+            'mode'    => '0644',
+          })
+        }
+
+        it {
+          should contain_file('structured_data_fact_bar.yaml').with({
+            'ensure'  => 'file',
+            'path'    => '/factsdir/bar.yaml',
+            'content' => bar_content,
+            'owner'   => 'root',
+            'group'   => 'root',
+            'mode'    => '0644',
+          })
+        }
+      end
+
       context 'with facts specified as a hash with different file and facts_dir' do
         let(:params) do
           {

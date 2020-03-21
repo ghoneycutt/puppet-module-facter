@@ -8,6 +8,7 @@ describe 'facter class' do
     facts_d_group = 'NT AUTHORITY\SYSTEM'
     facts_d_mode = nil
     test_facts_file = 'C:\ProgramData\PuppetLabs\facter\facts.d\\test.txt'
+    test_yaml_file = 'C:\ProgramData\PuppetLabs\facter\facts.d\\test.yaml'
     facts_file = 'C:\ProgramData\PuppetLabs\facter\facts.d\\facts.txt'
     facts_file_owner = 'NT AUTHORITY\SYSTEM'
     facts_file_group = 'NT AUTHORITY\SYSTEM'
@@ -18,6 +19,7 @@ describe 'facter class' do
     facts_d_group = 'root'
     facts_d_mode = '755'
     test_facts_file = '/etc/facter/facts.d/test.txt'
+    test_yaml_file = '/etc/facter/facts.d/test.yaml'
     facts_file = '/etc/facter/facts.d/facts.txt'
     facts_file_owner = 'root'
     facts_file_group = 'root'
@@ -122,6 +124,54 @@ describe 'facter class' do
 
       describe command('facter -p test_fact') do
         its(:stdout) { should contain('test_value') }
+      end
+    end
+  end
+
+  context 'with using facter::structured_data_fact' do
+    context 'should apply the manifest' do
+      pp = <<-EOS
+      facter::structured_data_fact { 'test':
+        data => {
+          'my_hash' => {
+            'a' => 1,
+            'b' => 2,
+          },
+        },
+        file => 'test.yaml',
+      }
+      EOS
+
+      if Gem.win_platform?
+        manifest = 'C:\manifest-facter_yaml.pp'
+
+        it 'creates manifest' do
+          File.open(manifest, 'w') { |f| f.write(pp) }
+          puts manifest
+          puts File.read(manifest)
+        end
+
+        describe command("PsExec -accepteula -s 'C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet.bat' apply --debug #{manifest}") do
+          its(:stderr) { should contain('with error code 0') }
+        end
+      else
+        it 'should work with no errors' do
+          apply_manifest(pp, :catch_failures => true)
+        end
+      end
+    end
+
+    context 'and should contain facts' do
+      describe file(test_yaml_file) do
+        it { should exist }
+      end
+
+      describe command('puppet facts my_hash.a') do
+        its(:stdout) { should contain('1') }
+      end
+
+      describe command('puppet facts my_hash.b') do
+        its(:stdout) { should contain('2') }
       end
     end
   end
