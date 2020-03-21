@@ -327,10 +327,16 @@ describe 'facter' do
             :message => 'expects a Stdlib::Absolutepath',
           },
           'String[1]' => {
-            :name    => ['facts_d_owner', 'facts_d_group', 'facts_file', 'facts_file_owner', 'facts_file_group'],
+            :name    => ['facts_d_owner', 'facts_d_group', 'facts_file_owner', 'facts_file_group'],
             :valid   => ['string'],
             :invalid => ['', ['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
             :message => '(expects a String value, got|expects a String\[1\] value, got)',
+          },
+          'Pattern to match strings that end with .txt' => {
+            :name    => ['facts_file'],
+            :valid   => ['foo.txt'],
+            :invalid => ['foo.text', 'foo-text', 'foo.text1', '', ['array'], { 'ha' => 'sh' }, 3, 2.42, true, false],
+            :message => 'Error while evaluating a Resource Statement',
           },
           'Optional[Stdlib::Filemode]' => {
             :name    => ['facts_d_mode', 'facts_file_mode'],

@@ -34,7 +34,8 @@
 #   A hash of `facter::fact` entries.
 #
 # @param facts_file
-#   The file in which the text based external facts are stored.
+#   The file in which the text based external facts are stored. This file must
+#   end with '.txt'.
 #
 # @param facts_file_owner
 #   The owner of the facts_file.
@@ -56,7 +57,7 @@ class facter (
   Stdlib::Absolutepath $path_to_facter_symlink = '/usr/local/bin/facter',
   Boolean $ensure_facter_symlink = false,
   Hash $facts_hash = {},
-  String[1] $facts_file = 'facts.txt',
+  Pattern[/\.txt*\Z/] $facts_file = 'facts.txt',
   String[1] $facts_file_owner = 'root',
   String[1] $facts_file_group = 'root',
   Optional[Stdlib::Filemode] $facts_file_mode = '0644',
