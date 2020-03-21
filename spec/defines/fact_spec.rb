@@ -50,7 +50,7 @@ describe 'facter::fact' do
             'name' => 'fact_line_fact1',
             'path' => '/factsdir/custom.txt',
             'line' => 'fact1=fact1value',
-            'match' => '^fact1=\S*$',
+            'match' => '^fact1=\S.*$',
           })
         }
       end
@@ -73,6 +73,23 @@ describe 'facter::fact' do
             'name' => 'fact_line_fact2',
             'line' => 'fact2=fact2value',
             'path' => '/etc/facter/facts.d/facts.txt',
+          })
+        }
+      end
+
+      context 'with fact specified with a space in the value' do
+        let(:title) { 'fact1' }
+        let(:params) do
+          {
+            :fact => 'fact1',
+            :value => 'space in value',
+          }
+        end
+
+        it {
+          should contain_file_line('fact_line_fact1').with({
+            'line' => 'fact1=space in value',
+            'match' => '^fact1=\S.*$',
           })
         }
       end
@@ -123,7 +140,7 @@ describe 'facter::fact' do
             'name' => 'fact_line_fact1',
             'path' => 'C:\factsdir\custom.txt',
             'line' => 'fact1=fact1value',
-            'match' => '^fact1=\S*$',
+            'match' => '^fact1=\S.*$',
           })
         }
       end

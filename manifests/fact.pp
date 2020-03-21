@@ -31,7 +31,7 @@ define facter::fact (
     $facts_file_path = "${facts_dir_path}/${facts_file}"
   }
 
-  $match = "^${name}=\\S*$"
+  $match = "^${name}=\\S.*$"
 
   if $facts_file != $facter::facts_file {
     file { "facts_file_${name}":
