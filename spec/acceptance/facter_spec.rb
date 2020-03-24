@@ -79,7 +79,7 @@ describe 'facter class' do
         if host_inventory['platform'] != 'windows'
           it { should be_grouped_into facts_file_group }
           it { should be_mode facts_file_mode }
-          its(:size) { should eq 0 }
+          its(:size) { should eq 38 }
         end
       end
     end
@@ -124,6 +124,64 @@ describe 'facter class' do
 
       describe command('facter -p test_fact') do
         its(:stdout) { should contain('test_value') }
+      end
+    end
+  end
+
+  context 'purges unmanaged facts' do
+    context 'should apply the manifest' do
+      setup_pp = <<-EOS
+      class { 'facter':
+        facts_hash => {
+          'test1_fact' => {
+            value => 'test1_value',
+          },
+        },
+      }
+      EOS
+      pp = <<-EOS
+      class { 'facter':
+        facts_hash => {
+          'test2_fact' => {
+            value => 'test2_value',
+          },
+        },
+      }
+      EOS
+
+      if Gem.win_platform?
+        setup_manifest = 'C:\manifest-setup.pp'
+        manifest = 'C:\manifest-facts_file_purge.pp'
+
+        it 'creates manifests' do
+          File.open(setup_manifest, 'w') { |f| f.write(setup_pp) }
+          puts setup_manifest
+          puts File.read(setup_manifest)
+          File.open(manifest, 'w') { |f| f.write(pp) }
+          puts manifest
+          puts File.read(manifest)
+        end
+
+        describe command("PsExec -accepteula -s 'C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet.bat' apply --debug #{setup_manifest}") do
+          its(:stderr) { should contain('with error code 0') }
+        end
+        describe command("PsExec -accepteula -s 'C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet.bat' apply --debug #{manifest}") do
+          its(:stderr) { should contain('with error code 0') }
+        end
+      else
+        it 'should work with no errors' do
+          apply_manifest(setup_pp, :catch_failures => true)
+          apply_manifest(pp, :catch_failures => true)
+        end
+      end
+    end
+
+    context 'and should remove facts not managed by puppet' do
+      describe file(facts_file) do
+        its(:content) { should_not match %r{test1_fact=.*} }
+      end
+      describe file(facts_file) do
+        its(:content) { should match %r{test2_fact=.*} }
       end
     end
   end

@@ -34,18 +34,20 @@ define facter::fact (
   $match = "^${name}=\\S.*$"
 
   if $facts_file != $facter::facts_file {
-    file { "facts_file_${name}":
-      ensure => file,
+    $concat_target = "facts_file_${name}"
+    concat { "facts_file_${name}":
+      ensure => 'present',
       path   => $facts_file_path,
       owner  => $facter::facts_file_owner,
       group  => $facter::facts_file_group,
       mode   => $facter::facts_file_mode,
     }
+  } else {
+    $concat_target = 'facts_file'
   }
 
-  file_line { "fact_line_${name}":
-    path  => $facts_file_path,
-    line  => "${name}=${value}",
-    match => $match,
+  concat::fragment { "fact_line_${name}":
+    target  => $concat_target,
+    content => "${name}=${value}",
   }
 }

@@ -22,12 +22,21 @@ describe 'facter' do
         it { should contain_class('facter') }
 
         it {
-          should contain_file('facts_file').with({
-            'ensure'  => 'file',
-            'path'    => '/etc/facter/facts.d/facts.txt',
-            'owner'   => 'root',
-            'group'   => 'root',
-            'mode'    => '0644',
+          should contain_concat('facts_file').with({
+            'ensure'         => 'present',
+            'path'           => '/etc/facter/facts.d/facts.txt',
+            'owner'          => 'root',
+            'group'          => 'root',
+            'mode'           => '0644',
+            'ensure_newline' => 'true',
+          })
+        }
+
+        it {
+          should contain_concat__fragment('facts_file-header').with({
+            'target'  => 'facts_file',
+            'content' => "# File managed by Puppet\n#DO NOT EDIT",
+            'order'   => '00',
           })
         }
 
@@ -128,8 +137,8 @@ describe 'facter' do
         end
 
         it {
-          should contain_file('facts_file').with({
-            'ensure'  => 'file',
+          should contain_concat('facts_file').with({
+            'ensure'  => 'present',
             'path'    => '/etc/facter/facts.d/facts.txt',
             'owner'   => 'root',
             'group'   => 'root',
@@ -138,14 +147,14 @@ describe 'facter' do
         }
 
         it {
-          should contain_file_line('fact_line_fact1').with({
-            'line' => 'fact1=fact1value',
+          should contain_concat__fragment('fact_line_fact1').with({
+            'content' => 'fact1=fact1value',
           })
         }
 
         it {
-          should contain_file_line('fact_line_fact2').with({
-            'line' => 'fact2=fact2value',
+          should contain_concat__fragment('fact_line_fact2').with({
+            'content' => 'fact2=fact2value',
           })
         }
 
@@ -248,8 +257,8 @@ describe 'facter' do
         it { should contain_facter__fact('fact3') }
 
         it {
-          should contain_file('facts_file').with({
-            'ensure'  => 'file',
+          should contain_concat('facts_file').with({
+            'ensure'  => 'present',
             'path'    => '/etc/facter/facts.d/file.txt',
             'owner'   => 'root',
             'group'   => 'root',
@@ -258,8 +267,8 @@ describe 'facter' do
         }
 
         it {
-          should contain_file('facts_file_fact2').with({
-            'ensure'  => 'file',
+          should contain_concat('facts_file_fact2').with({
+            'ensure'  => 'present',
             'path'    => '/etc/facter/facts.d/file2.txt',
             'owner'   => 'root',
             'group'   => 'root',
@@ -268,8 +277,8 @@ describe 'facter' do
         }
 
         it {
-          should contain_file('facts_file_fact3').with({
-            'ensure'  => 'file',
+          should contain_concat('facts_file_fact3').with({
+            'ensure'  => 'present',
             'path'    => '/etc/facts3/file3.txt',
             'owner'   => 'root',
             'group'   => 'root',
@@ -278,20 +287,20 @@ describe 'facter' do
         }
 
         it {
-          should contain_file_line('fact_line_fact1').with({
-            'line' => 'fact1=fact1value',
+          should contain_concat__fragment('fact_line_fact1').with({
+            'content' => 'fact1=fact1value',
           })
         }
 
         it {
-          should contain_file_line('fact_line_fact2').with({
-            'line' => 'fact2=fact2value',
+          should contain_concat__fragment('fact_line_fact2').with({
+            'content' => 'fact2=fact2value',
           })
         }
 
         it {
-          should contain_file_line('fact_line_fact3').with({
-            'line' => 'fact3=fact3value',
+          should contain_concat__fragment('fact_line_fact3').with({
+            'content' => 'fact3=fact3value',
           })
         }
 
@@ -353,8 +362,8 @@ describe 'facter' do
         }
 
         it {
-          should contain_file('facts_file').with({
-            'ensure'  => 'file',
+          should contain_concat('facts_file').with({
+            'ensure'  => 'present',
             'path'    => '/etc/puppet/facter/facts.d/file.txt',
             'owner'   => 'puppet',
             'group'   => 'puppet',
@@ -363,8 +372,8 @@ describe 'facter' do
         }
 
         it {
-          should contain_file_line('fact_line_fact').with({
-            'line' => 'fact=value',
+          should contain_concat__fragment('fact_line_fact').with({
+            'content' => 'fact=value',
           })
         }
       end
@@ -462,12 +471,12 @@ describe 'facter' do
         it { should contain_class('facter') }
 
         it {
-          should contain_file('facts_file').with({
-            'ensure'  => 'file',
-            'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d\facts.txt',
-            'owner'   => 'NT AUTHORITY\SYSTEM',
-            'group'   => 'NT AUTHORITY\SYSTEM',
-            'mode'    => nil,
+          should contain_concat('facts_file').with({
+            'ensure'         => 'present',
+            'path'           => 'C:\ProgramData\PuppetLabs\facter\facts.d\facts.txt',
+            'owner'          => 'NT AUTHORITY\SYSTEM',
+            'group'          => 'NT AUTHORITY\SYSTEM',
+            'ensure_newline' => 'true',
           })
         }
 
@@ -595,18 +604,17 @@ describe 'facter' do
         }
 
         it {
-          should contain_file('facts_file').with({
-            'ensure'  => 'file',
+          should contain_concat('facts_file').with({
+            'ensure'  => 'present',
             'path'    => 'C:\ProgramData\PuppetLabs\facter\facts.d\file.txt',
             'owner'   => 'puppet',
             'group'   => 'puppet',
-            'mode'    => nil,
           })
         }
 
         it {
-          should contain_file_line('fact_line_fact').with({
-            'line' => 'fact=value',
+          should contain_concat__fragment('fact_line_fact').with({
+            'content' => 'fact=value',
           })
         }
       end # context 'with all options specified'
