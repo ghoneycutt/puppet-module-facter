@@ -79,7 +79,7 @@ describe 'facter class' do
         if host_inventory['platform'] != 'windows'
           it { should be_grouped_into facts_file_group }
           it { should be_mode facts_file_mode }
-          its(:size) { should eq 0 }
+          its(:size) { should eq 38 }
         end
       end
     end
@@ -128,7 +128,7 @@ describe 'facter class' do
     end
   end
 
-  context 'with specify facts_file_purge as true' do
+  context 'purges unmanaged facts' do
     context 'should apply the manifest' do
       setup_pp = <<-EOS
       class { 'facter':
@@ -141,8 +141,7 @@ describe 'facter class' do
       EOS
       pp = <<-EOS
       class { 'facter':
-        facts_file_purge => true,
-        facts_hash       => {
+        facts_hash => {
           'test2_fact' => {
             value => 'test2_value',
           },
@@ -178,11 +177,11 @@ describe 'facter class' do
     end
 
     context 'and should remove facts not managed by puppet' do
-      describe command('facter -p test1_fact') do
-        its(:stdout) { should_not contain('test1_value') }
+      describe file(facts_file) do
+        its(:content) { should_not match %r{test1_fact=.*} }
       end
-      describe command('facter -p test2_fact') do
-        its(:stdout) { should contain('test2_value') }
+      describe file(facts_file) do
+        its(:content) { should match %r{test2_fact=.*} }
       end
     end
   end

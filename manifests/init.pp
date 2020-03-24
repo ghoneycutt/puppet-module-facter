@@ -49,8 +49,6 @@
 # @param facts_file_mode
 #   The mode of the facts_file.
 #
-# @param facts_file_purge
-#   Use concat resources for facts file to ensure unmanaged facts are removed
 #
 class facter (
   Boolean $manage_facts_d_dir = true,
@@ -68,7 +66,6 @@ class facter (
   String[1] $facts_file_owner = 'root',
   String[1] $facts_file_group = 'root',
   Optional[Stdlib::Filemode] $facts_file_mode = '0644',
-  Boolean $facts_file_purge = false,
 ) {
   if $facts['os']['family'] == 'windows' {
     $facts_file_path  = "${facts_d_dir}\\${facts_file}"
@@ -104,6 +101,7 @@ class facter (
       purge   => $purge_facts_d,
       recurse => $purge_facts_d,
       require => Exec["mkdir_p-${facts_d_dir}"],
+      before  => Concat['facts_file'],
     }
   }
 
@@ -116,30 +114,19 @@ class facter (
     }
   }
 
-  if $facts_file_purge {
-    concat { 'facts_file':
-      ensure         => 'present',
-      path           => $facts_file_path,
-      owner          => $facts_file_owner,
-      group          => $facts_file_group,
-      mode           => $facts_file_mode_real,
-      ensure_newline => true,
-      require        => File['facts_d_directory'],
-    }
-    # One fragment must exist in order for contents to be managed
-    concat::fragment { 'facts_file-header':
-      target  => 'facts_file',
-      content => '# File managed by Puppet',
-      order   => '00',
-    }
-  } else {
-    file { 'facts_file':
-      ensure => file,
-      path   => $facts_file_path,
-      owner  => $facts_file_owner,
-      group  => $facts_file_group,
-      mode   => $facts_file_mode_real,
-    }
+  concat { 'facts_file':
+    ensure         => 'present',
+    path           => $facts_file_path,
+    owner          => $facts_file_owner,
+    group          => $facts_file_group,
+    mode           => $facts_file_mode_real,
+    ensure_newline => true,
+  }
+  # One fragment must exist in order for contents to be managed
+  concat::fragment { 'facts_file-header':
+    target  => 'facts_file',
+    content => "# File managed by Puppet\n#DO NOT EDIT",
+    order   => '00',
   }
 
   $facts_defaults = {
