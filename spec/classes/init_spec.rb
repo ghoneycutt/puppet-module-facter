@@ -30,6 +30,7 @@ describe 'facter' do
             'mode'    => '0644',
           })
         }
+        it { should_not contain_concat('facts_file') }
 
         it {
           should contain_file('facts_d_directory').with({
@@ -369,6 +370,23 @@ describe 'facter' do
         }
       end
 
+      context 'with facts_file_purge' do
+        let(:params) { { :facts_file_purge => true } }
+
+        it {
+          should contain_concat('facts_file').with({
+            'ensure'         => 'present',
+            'path'           => '/etc/facter/facts.d/facts.txt',
+            'owner'          => 'root',
+            'group'          => 'root',
+            'mode'           => '0644',
+            'ensure_newline' => 'true',
+            'require'        => 'File[facts_d_directory]',
+          })
+        }
+        it { should_not contain_file('facts_file') }
+      end # context 'with facts_file_purge'
+
       describe 'variable type and content validations' do
         # set needed custom facts and variables
         let(:facts) do
@@ -470,6 +488,8 @@ describe 'facter' do
             'mode'    => nil,
           })
         }
+
+        it { should_not contain_concat('facts_file') }
 
         it {
           should contain_file('facts_d_directory').with({
@@ -610,6 +630,22 @@ describe 'facter' do
           })
         }
       end # context 'with all options specified'
+
+      context 'with facts_file_purge' do
+        let(:params) { { :facts_file_purge => true } }
+
+        it {
+          should contain_concat('facts_file').with({
+            'ensure'         => 'present',
+            'path'           => 'C:\ProgramData\PuppetLabs\facter\facts.d\facts.txt',
+            'owner'          => 'NT AUTHORITY\SYSTEM',
+            'group'          => 'NT AUTHORITY\SYSTEM',
+            'ensure_newline' => 'true',
+            'require'        => 'File[facts_d_directory]',
+          })
+        }
+        it { should_not contain_file('facts_file') }
+      end # context 'with facts_file_purge'
     end # on_support_os(windows)
   end # context 'on windows'
 end # describe 'facter'

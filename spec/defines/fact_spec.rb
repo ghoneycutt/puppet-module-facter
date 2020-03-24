@@ -53,6 +53,8 @@ describe 'facter::fact' do
             'match' => '^fact1=\S.*$',
           })
         }
+
+        it { should_not contain_concat__fragment('fact_line_fact1') }
       end
 
       context 'with fact specified ' do
@@ -92,6 +94,22 @@ describe 'facter::fact' do
             'match' => '^fact1=\S.*$',
           })
         }
+      end
+
+      context 'with facts_file_purge' do
+        let(:title) { 'fact1' }
+        let(:pre_condition) { "class { 'facter': facts_file_purge => true }" }
+        let(:params) { { :value => 'fact1value' } }
+
+        it { should contain_concat('facts_file') }
+        it {
+          should contain_concat__fragment('fact_line_fact1').with({
+            'target'  => 'facts_file',
+            'content' => "fact1=fact1value",
+          })
+        }
+
+        it { should_not contain_file_line('fact_line_fact1') }
       end
     end # end on_supported_os(redhat)
   end # context "on RedHat"
@@ -165,6 +183,21 @@ describe 'facter::fact' do
             'path' => 'C:\ProgramData\PuppetLabs\facter\facts.d\facts.txt',
           })
         }
+      end
+
+      context 'with facts_file_purge' do
+        let(:title) { 'fact1' }
+        let(:pre_condition) { "class { 'facter': facts_file_purge => true }" }
+        let(:params) { { :value => 'fact1value' } }
+
+        it {
+          should contain_concat__fragment('fact_line_fact1').with({
+            'target'  => 'facts_file',
+            'content' => "fact1=fact1value",
+          })
+        }
+
+        it { should_not contain_file_line('fact_line_fact1') }
       end
     end # end on_supported_os(windows)
   end # context "on windows"

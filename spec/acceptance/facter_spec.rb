@@ -128,6 +128,65 @@ describe 'facter class' do
     end
   end
 
+  context 'with specify facts_file_purge as true' do
+    context 'should apply the manifest' do
+      setup_pp = <<-EOS
+      class { 'facter':
+        facts_hash => {
+          'test1_fact' => {
+            value => 'test1_value',
+          },
+        },
+      }
+      EOS
+      pp = <<-EOS
+      class { 'facter':
+        facts_file_purge => true,
+        facts_hash       => {
+          'test2_fact' => {
+            value => 'test2_value',
+          },
+        },
+      }
+      EOS
+
+      if Gem.win_platform?
+        setup_manifest = 'C:\manifest-setup.pp'
+        manifest = 'C:\manifest-facts_file_purge.pp'
+
+        it 'creates manifests' do
+          File.open(setup_manifest, 'w') { |f| f.write(setup_pp) }
+          puts setup_manifest
+          puts File.read(setup_manifest)
+          File.open(manifest, 'w') { |f| f.write(pp) }
+          puts manifest
+          puts File.read(manifest)
+        end
+
+        describe command("PsExec -accepteula -s 'C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet.bat' apply --debug #{setup_manifest}") do
+          its(:stderr) { should contain('with error code 0') }
+        end
+        describe command("PsExec -accepteula -s 'C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet.bat' apply --debug #{manifest}") do
+          its(:stderr) { should contain('with error code 0') }
+        end
+      else
+        it 'should work with no errors' do
+          apply_manifest(setup_pp, :catch_failures => true)
+          apply_manifest(pp, :catch_failures => true)
+        end
+      end
+    end
+
+    context 'and should remove facts not managed by puppet' do
+      describe command('facter -p test1_fact') do
+        its(:stdout) { should_not contain('test1_value') }
+      end
+      describe command('facter -p test2_fact') do
+        its(:stdout) { should contain('test2_value') }
+      end
+    end
+  end
+
   context 'with using facter::structured_data_fact' do
     context 'should apply the manifest' do
       pp = <<-EOS
