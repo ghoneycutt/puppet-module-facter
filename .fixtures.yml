@@ -5,4 +5,4 @@ fixtures:
       ref: '4.22.0'
     concat:
       repo: 'https://github.com/puppetlabs/puppetlabs-concat.git'
-      ref: '4.0.0'
+      ref: 'v6.0.0'
