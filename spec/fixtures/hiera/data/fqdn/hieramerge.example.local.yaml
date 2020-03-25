@@ -1,9 +1,0 @@
----
-# Collection of FQDN specific values for
-# - hiera merge / hiera_array() tests
-# - variable type and content validations
-
-# facts_hash_hiera_merge
-facter::facts_hash:
-  role:
-    value: 'puppetmaster'

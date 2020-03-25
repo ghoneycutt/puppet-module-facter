@@ -11,7 +11,7 @@ describe 'facter::fact' do
       ],
     }
 
-    on_supported_os(redhat).each do |os, os_facts|
+    on_supported_os(redhat).each do |_os, os_facts|
       let(:facts) do
         os_facts
       end
@@ -26,27 +26,33 @@ describe 'facter::fact' do
             :facts_dir => '/factsdir',
           }
         end
-    
+
+        it { should contain_class('facter') }
+
+        # These must exist or the coverage report lists these incorrectly as
+        # untouched resources. These resources are all from the facter class.
+        it { should contain_concat('facts_file') }
+        it { should contain_file('facts_d_directory') }
+        it { should contain_exec('mkdir_p-/etc/facter/facts.d') }
+
         it {
-          should contain_file('facts_file_fact1').with({
-            'ensure'  => 'file',
+          should contain_concat('facts_file_fact1').with({
+            'ensure'  => 'present',
             'path'    => '/factsdir/custom.txt',
             'owner'   => 'root',
             'group'   => 'root',
             'mode'    => '0644',
           })
         }
-    
+
         it {
-          should contain_file_line('fact_line_fact1').with({
-            'name' => 'fact_line_fact1',
-            'path' => '/factsdir/custom.txt',
-            'line' => 'fact1=fact1value',
-            'match' => '^fact1=\S*$',
+          should contain_concat__fragment('fact_line_fact1').with({
+            'target'  => 'facts_file_fact1',
+            'content' => 'fact1=fact1value',
           })
         }
       end
-    
+
       context 'with fact specified ' do
         let(:title) { 'fact2' }
         let(:params) do
@@ -55,16 +61,31 @@ describe 'facter::fact' do
             :value => 'fact2value',
           }
         end
-    
+
         # Does not contain this file, because we are using the default which is
         # managed in the facter class.
-        it { should_not contain_file('facts_file_fact2') }
-    
+        it { should_not contain_concat('facts_file_fact2') }
+
         it {
-          should contain_file_line('fact_line_fact2').with({
-            'name' => 'fact_line_fact2',
-            'line' => 'fact2=fact2value',
-            'path' => '/etc/facter/facts.d/facts.txt',
+          should contain_concat__fragment('fact_line_fact2').with({
+            'target'  => 'facts_file',
+            'content' => 'fact2=fact2value',
+          })
+        }
+      end
+
+      context 'with fact specified with a space in the value' do
+        let(:title) { 'fact1' }
+        let(:params) do
+          {
+            :fact => 'fact1',
+            :value => 'space in value',
+          }
+        end
+
+        it {
+          should contain_concat__fragment('fact_line_fact1').with({
+            'content' => 'fact1=space in value',
           })
         }
       end
@@ -81,7 +102,7 @@ describe 'facter::fact' do
       ],
     }
 
-    on_supported_os(windows).each do |os, os_facts|
+    on_supported_os(windows).each do |_os, os_facts|
       let(:facts) do
         os_facts
       end
@@ -96,26 +117,28 @@ describe 'facter::fact' do
             :facts_dir => 'C:\factsdir',
           }
         end
-    
+
+        # These must exist or the coverage report lists these incorrectly as
+        # untouched resources. These resources are all from the facter class.
+        it { should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\facts.d') }
+
         it {
-          should contain_file('facts_file_fact1').with({
-            'ensure'  => 'file',
+          should contain_concat('facts_file_fact1').with({
+            'ensure'  => 'present',
             'path'    => 'C:\factsdir\custom.txt',
             'owner'   => 'NT AUTHORITY\SYSTEM',
             'group'   => 'NT AUTHORITY\SYSTEM',
           })
         }
-    
+
         it {
-          should contain_file_line('fact_line_fact1').with({
-            'name' => 'fact_line_fact1',
-            'path' => 'C:\factsdir\custom.txt',
-            'line' => 'fact1=fact1value',
-            'match' => '^fact1=\S*$',
+          should contain_concat__fragment('fact_line_fact1').with({
+            'target'  => 'facts_file_fact1',
+            'content' => 'fact1=fact1value',
           })
         }
       end
-    
+
       context 'with fact specified ' do
         let(:title) { 'fact2' }
         let(:params) do
@@ -124,16 +147,14 @@ describe 'facter::fact' do
             :value => 'fact2value',
           }
         end
-    
+
         # Does not contain this file, because we are using the default which is
         # managed in the facter class.
-        it { should_not contain_file('facts_file_fact2') }
-    
+        it { should_not contain_concat('facts_file_fact2') }
+
         it {
-          should contain_file_line('fact_line_fact2').with({
-            'name' => 'fact_line_fact2',
-            'line' => 'fact2=fact2value',
-            'path' => 'C:\ProgramData\PuppetLabs\facter\facts.d\facts.txt',
+          should contain_concat__fragment('fact_line_fact2').with({
+            'content' => 'fact2=fact2value',
           })
         }
       end

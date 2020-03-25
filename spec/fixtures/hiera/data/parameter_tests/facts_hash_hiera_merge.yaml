@@ -1,5 +1,0 @@
----
-facter::facts_hash:
-  location:
-    value: 'RNB'
-    file: 'location.txt'
