@@ -33,7 +33,6 @@ describe 'facter::structured_data_fact' do
 
         # These must exist or the coverage report lists these incorrectly as
         # untouched resources. These resources are all from the facter class.
-        it { should contain_file('facts_file') }
         it { should contain_file('facts_d_directory') }
         it { should contain_exec('mkdir_p-/etc/facter/facts.d') }
 

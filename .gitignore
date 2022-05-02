@@ -10,7 +10,6 @@
 /coverage/
 /bin/
 /doc/
-/Gemfile.local
 /Gemfile.lock
 /junit/
 /log/
@@ -25,3 +24,4 @@
 .project
 .envrc
 /inventory.yaml
+/spec/fixtures/litmus_inventory.yaml

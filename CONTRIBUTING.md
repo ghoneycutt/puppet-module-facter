@@ -7,7 +7,7 @@ Contributions are welcomed!
 1. update version in `metadata.json`
 1. Update CHANGELOG.md with the following command replacing `--future-release` with appropriate value.
 ```
-github_changelog_generator --user ghoneycutt --project puppet-module-rpcbind --future-release v2.5.0
+pdk bundle exec github_changelog_generator --user ghoneycutt --project puppet-module-facter --future-release v4.1.0
 ```
 1. Update `REFERENCE.md` with the command `pdk bundle exec rake reference`
 1. Commit changes and push to master
