@@ -1,4 +1,14 @@
 ---
+.github/workflows/ci.yaml:
+    acceptance_matrix:
+      set:
+      - ---el8
+      - el9
+      - ---debian-11
+      - ---ubuntu-2004
+      - ---ubuntu-2204
+.github/workflows/release.yaml:
+  username: ghoneycutt
 .gitlab-ci.yml:
   delete: true
 
