@@ -60,42 +60,6 @@ appveyor.yml:
 data/common.yaml:
   unmanaged: true
 
-# The Gemfile is unmanaged because there is a bug where required gems are
-# included with 'require: false'. This causes TravisCI to fail as it cannot
-# find 'rake'. When this is fixed, the commented out lines should be able to be
-# used along with whatever change is necessary to include 'rake' without the
-# 'require: false'.
-#
-# https://github.com/puppetlabs/pdk-templates/issues/211
-#
-Gemfile:
-  unmanaged: true
-#  required:
-#    ':development':
-#      - gem: rake
-#      - gem: beaker
-#      - gem: beaker-docker
-#      - gem: beaker-module_install_helper
-#      - gem: beaker-puppet
-#      - gem: beaker-puppet_install_helper
-#      - gem: beaker-rspec
-#      - gem: metadata-json-lint
-#      - gem: puppet-lint
-#      - gem: puppet-lint-alias-check
-#      - gem: puppet-lint-empty_string-check
-#      - gem: puppet-lint-file_ensure-check
-#      - gem: puppet-lint-file_source_rights-check
-#      - gem: puppet-lint-leading_zero-check
-#      - gem: puppet-lint-spaceship_operator_without_tag-check
-#      - gem: puppet-lint-trailing_comma-check
-#      - gem: puppet-lint-undef_in_function-check
-#      - gem: puppet-lint-unquoted_string-check
-#      - gem: puppet-lint-variable_contains_upcase
-#      - gem: puppet-strings
-#      - gem: puppetlabs_spec_helper
-#      - gem: rspec-puppet
-#      - gem: serverspec
-
 Rakefile:
   default_disabled_lint_checks:
     - '80chars'

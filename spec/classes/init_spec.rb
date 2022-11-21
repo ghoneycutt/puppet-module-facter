@@ -9,7 +9,7 @@ describe 'facter' do
       supported_os: [
         {
           'operatingsystem'        => 'RedHat',
-          'operatingsystemrelease' => ['7'],
+          'operatingsystemrelease' => ['9'],
         },
       ],
     }
@@ -64,7 +64,7 @@ describe 'facter' do
         it {
           should contain_exec('mkdir_p-/etc/puppetlabs/facter').with({
             'command' => 'mkdir -p /etc/puppetlabs/facter',
-            'unless'  => 'test -d /etc/puppetlabs/facter',
+            'creates' => '/etc/puppetlabs/facter',
           })
         }
 
@@ -416,7 +416,6 @@ describe 'facter' do
 '
           })
         }
-
       end
 
       describe 'variable type and content validations' do
@@ -428,7 +427,7 @@ describe 'facter' do
         end
         let(:validation_params) do
           {
-            #:param => 'value',
+            # :param => 'value',
           }
         end
 
@@ -543,6 +542,24 @@ describe 'facter' do
         }
 
         it { should_not contain_file('facter_symlink') }
+
+        it {
+          should contain_exec('mkdir_p-C:\ProgramData\PuppetLabs\facter\etc').with({
+            'command' => 'cmd /c mkdir C:\ProgramData\PuppetLabs\facter\etc',
+            'creates' => 'C:\ProgramData\PuppetLabs\facter\etc',
+            'path'    => 'C:\Program Files\Puppet Labs\Puppet\puppet\bin;C:\Program Files\Puppet Labs\Puppet\bin',
+          })
+        }
+
+        it {
+          should contain_file('C:\ProgramData\PuppetLabs\facter\etc').with({
+            'ensure'  => 'directory',
+            'owner'   => 'NT AUTHORITY\SYSTEM',
+            'group'   => 'NT AUTHORITY\SYSTEM',
+            'mode'    => nil,
+            'require' => 'Exec[mkdir_p-C:\ProgramData\PuppetLabs\facter\etc]',
+          })
+        }
       end
 
       describe 'with purge_facts_d' do
