@@ -8,3 +8,8 @@ facter::facts_file_owner: 'NT AUTHORITY\SYSTEM'
 facter::facts_file_group: 'NT AUTHORITY\SYSTEM'
 facter::facts_file_mode: null
 facter::ensure_facter_symlink: false
+facter::facter_conf_dir: 'C:\ProgramData\PuppetLabs\facter\etc'
+facter::facter_conf_dir_owner: 'NT AUTHORITY\SYSTEM'
+facter::facter_conf_dir_group: 'NT AUTHORITY\SYSTEM'
+facter::facter_conf_owner: 'NT AUTHORITY\SYSTEM'
+facter::facter_conf_group: 'NT AUTHORITY\SYSTEM'
