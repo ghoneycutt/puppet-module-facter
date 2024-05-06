@@ -15,7 +15,7 @@
 #   default facts_d_dir.
 #
 define facter::fact (
-  String[1] $value,
+  String $value,
   String[1] $fact = $name,
   Optional[String[1]] $file = undef,
   Optional[Stdlib::Absolutepath] $facts_dir = undef,
