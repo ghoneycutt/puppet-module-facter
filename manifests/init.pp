@@ -70,7 +70,7 @@ class facter (
   if $facts['os']['family'] == 'windows' {
     $facts_file_path  = "${facts_d_dir}\\${facts_file}"
     $facts_d_mode_real = undef
-    $facts_file_mode_real = undef
+    $facts_file_mode_real = $facts_file_mode
   } else {
     $facts_file_path  = "${facts_d_dir}/${facts_file}"
     $facts_d_mode_real = $facts_d_mode
