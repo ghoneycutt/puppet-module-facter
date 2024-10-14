@@ -176,7 +176,7 @@ class facter (
     require => Exec["mkdir_p-${facter_conf_dir}"],
   }
   if ! empty($facter_conf) {
-    $facter_conf_json = to_json_pretty($facter_conf)
+    $facter_conf_json = stdlib::to_json_pretty($facter_conf)
     file { "${facter_conf_dir}/${facter_conf_name}":
       ensure  => 'file',
       owner   => $facter_conf_owner,
