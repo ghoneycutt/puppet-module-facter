@@ -13,6 +13,10 @@
 * [`facter::fact`](#facterfact): Define txt based external facts
 * [`facter::structured_data_fact`](#facterstructured_data_fact): Define YAML based external structured data facts.
 
+### Data types
+
+* [`Facter::Conf`](#facterconf)
+
 ## Classes
 
 ### <a name="facter"></a>`facter`
@@ -38,6 +42,15 @@ The following parameters are available in the `facter` class:
 * [`facts_file_owner`](#facts_file_owner)
 * [`facts_file_group`](#facts_file_group)
 * [`facts_file_mode`](#facts_file_mode)
+* [`facter_conf_dir`](#facter_conf_dir)
+* [`facter_conf_dir_owner`](#facter_conf_dir_owner)
+* [`facter_conf_dir_group`](#facter_conf_dir_group)
+* [`facter_conf_dir_mode`](#facter_conf_dir_mode)
+* [`facter_conf_name`](#facter_conf_name)
+* [`facter_conf_owner`](#facter_conf_owner)
+* [`facter_conf_group`](#facter_conf_group)
+* [`facter_conf_mode`](#facter_conf_mode)
+* [`facter_conf`](#facter_conf)
 
 ##### <a name="manage_facts_d_dir"></a>`manage_facts_d_dir`
 
@@ -161,6 +174,78 @@ The mode of the facts_file.
 
 Default value: `'0644'`
 
+##### <a name="facter_conf_dir"></a>`facter_conf_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+The facter configuration directory
+
+Default value: `'/etc/puppetlabs/facter'`
+
+##### <a name="facter_conf_dir_owner"></a>`facter_conf_dir_owner`
+
+Data type: `String[1]`
+
+The facter configuration directory owner
+
+Default value: `'root'`
+
+##### <a name="facter_conf_dir_group"></a>`facter_conf_dir_group`
+
+Data type: `String[1]`
+
+The facter configuration directory group owner
+
+Default value: `'root'`
+
+##### <a name="facter_conf_dir_mode"></a>`facter_conf_dir_mode`
+
+Data type: `Stdlib::Filemode`
+
+The facter configuration directory mode
+
+Default value: `'0755'`
+
+##### <a name="facter_conf_name"></a>`facter_conf_name`
+
+Data type: `String[1]`
+
+The facter configuration file name
+
+Default value: `'facter.conf'`
+
+##### <a name="facter_conf_owner"></a>`facter_conf_owner`
+
+Data type: `String[1]`
+
+The facter configuration file name owner
+
+Default value: `'root'`
+
+##### <a name="facter_conf_group"></a>`facter_conf_group`
+
+Data type: `String[1]`
+
+The facter configuration file name group owner
+
+Default value: `'root'`
+
+##### <a name="facter_conf_mode"></a>`facter_conf_mode`
+
+Data type: `Stdlib::Filemode`
+
+The facter configuration file name mode
+
+Default value: `'0644'`
+
+##### <a name="facter_conf"></a>`facter_conf`
+
+Data type: `Facter::Conf`
+
+Hash of facter configurations
+
+Default value: `{}`
+
 ## Defined types
 
 ### <a name="facterfact"></a>`facter::fact`
@@ -242,4 +327,34 @@ Directory in which the file will be placed. If not specified, use the
 default facts_d_dir.
 
 Default value: ``undef``
+
+## Data types
+
+### <a name="facterconf"></a>`Facter::Conf`
+
+The Facter::Conf data type.
+
+Alias of
+
+```puppet
+Struct[{
+    'facts'  => Optional[Struct[{
+          'blocklist' => Optional[Array[String]],
+          'ttls'      => Optional[Array[Hash]]
+    }]],
+    'global' => Optional[Struct[{
+          'external-dir'      => Optional[Array[Stdlib::Absolutepath]],
+          'custom-dir'        => Optional[Array[Stdlib::Absolutepath]],
+          'no-external-facts' => Optional[Boolean],
+          'no-custom-facts'   => Optional[Boolean],
+          'no-ruby'           => Optional[Boolean]
+    }]],
+    'cli'    => Optional[Struct[{
+          'debug'     => Optional[Boolean],
+          'trace'     => Optional[Boolean],
+          'verbose'   => Optional[Boolean],
+          'log-level' => Optional[Boolean]
+    }]]
+}]
+```
 
