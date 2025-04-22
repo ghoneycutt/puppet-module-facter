@@ -10,12 +10,12 @@
 
 ### Defined types
 
-* [`facter::fact`](#facterfact): Define txt based external facts
-* [`facter::structured_data_fact`](#facterstructured_data_fact): Define YAML based external structured data facts.
+* [`facter::fact`](#facter--fact): Define txt based external facts
+* [`facter::structured_data_fact`](#facter--structured_data_fact): Define YAML based external structured data facts.
 
 ### Data types
 
-* [`Facter::Conf`](#facterconf)
+* [`Facter::Conf`](#Facter--Conf)
 
 ## Classes
 
@@ -27,49 +27,49 @@ This class will manage facter and allow you to specify external facts.
 
 The following parameters are available in the `facter` class:
 
-* [`manage_facts_d_dir`](#manage_facts_d_dir)
-* [`purge_facts_d`](#purge_facts_d)
-* [`facts_d_dir`](#facts_d_dir)
-* [`facts_d_owner`](#facts_d_owner)
-* [`facts_d_group`](#facts_d_group)
-* [`facts_d_mode`](#facts_d_mode)
-* [`path_to_facter`](#path_to_facter)
-* [`path_to_facter_symlink`](#path_to_facter_symlink)
-* [`ensure_facter_symlink`](#ensure_facter_symlink)
-* [`facts_hash`](#facts_hash)
-* [`structured_data_facts_hash`](#structured_data_facts_hash)
-* [`facts_file`](#facts_file)
-* [`facts_file_owner`](#facts_file_owner)
-* [`facts_file_group`](#facts_file_group)
-* [`facts_file_mode`](#facts_file_mode)
-* [`facter_conf_dir`](#facter_conf_dir)
-* [`facter_conf_dir_owner`](#facter_conf_dir_owner)
-* [`facter_conf_dir_group`](#facter_conf_dir_group)
-* [`facter_conf_dir_mode`](#facter_conf_dir_mode)
-* [`facter_conf_name`](#facter_conf_name)
-* [`facter_conf_owner`](#facter_conf_owner)
-* [`facter_conf_group`](#facter_conf_group)
-* [`facter_conf_mode`](#facter_conf_mode)
-* [`facter_conf`](#facter_conf)
+* [`manage_facts_d_dir`](#-facter--manage_facts_d_dir)
+* [`purge_facts_d`](#-facter--purge_facts_d)
+* [`facts_d_dir`](#-facter--facts_d_dir)
+* [`facts_d_owner`](#-facter--facts_d_owner)
+* [`facts_d_group`](#-facter--facts_d_group)
+* [`facts_d_mode`](#-facter--facts_d_mode)
+* [`path_to_facter`](#-facter--path_to_facter)
+* [`path_to_facter_symlink`](#-facter--path_to_facter_symlink)
+* [`ensure_facter_symlink`](#-facter--ensure_facter_symlink)
+* [`facts_hash`](#-facter--facts_hash)
+* [`structured_data_facts_hash`](#-facter--structured_data_facts_hash)
+* [`facts_file`](#-facter--facts_file)
+* [`facts_file_owner`](#-facter--facts_file_owner)
+* [`facts_file_group`](#-facter--facts_file_group)
+* [`facts_file_mode`](#-facter--facts_file_mode)
+* [`facter_conf_dir`](#-facter--facter_conf_dir)
+* [`facter_conf_dir_owner`](#-facter--facter_conf_dir_owner)
+* [`facter_conf_dir_group`](#-facter--facter_conf_dir_group)
+* [`facter_conf_dir_mode`](#-facter--facter_conf_dir_mode)
+* [`facter_conf_name`](#-facter--facter_conf_name)
+* [`facter_conf_owner`](#-facter--facter_conf_owner)
+* [`facter_conf_group`](#-facter--facter_conf_group)
+* [`facter_conf_mode`](#-facter--facter_conf_mode)
+* [`facter_conf`](#-facter--facter_conf)
 
-##### <a name="manage_facts_d_dir"></a>`manage_facts_d_dir`
+##### <a name="-facter--manage_facts_d_dir"></a>`manage_facts_d_dir`
 
 Data type: `Boolean`
 
 Boolean to determine if the external facts directory will be managed.
 
-Default value: ``true``
+Default value: `true`
 
-##### <a name="purge_facts_d"></a>`purge_facts_d`
+##### <a name="-facter--purge_facts_d"></a>`purge_facts_d`
 
 Data type: `Boolean`
 
 Boolean to determine if the external facts directory should be purged. This
 will remove files not managed by Puppet.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="facts_d_dir"></a>`facts_d_dir`
+##### <a name="-facter--facts_d_dir"></a>`facts_d_dir`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -77,7 +77,7 @@ Path to the directory which will contain the external facts.
 
 Default value: `'/etc/facter/facts.d'`
 
-##### <a name="facts_d_owner"></a>`facts_d_owner`
+##### <a name="-facter--facts_d_owner"></a>`facts_d_owner`
 
 Data type: `String[1]`
 
@@ -85,7 +85,7 @@ The owner of the `facts_d_dir`.
 
 Default value: `'root'`
 
-##### <a name="facts_d_group"></a>`facts_d_group`
+##### <a name="-facter--facts_d_group"></a>`facts_d_group`
 
 Data type: `String[1]`
 
@@ -93,15 +93,15 @@ The group of the `facts_d_dir`.
 
 Default value: `'root'`
 
-##### <a name="facts_d_mode"></a>`facts_d_mode`
+##### <a name="-facter--facts_d_mode"></a>`facts_d_mode`
 
-Data type: `Optional[Stdlib::Filemode]`
+Data type: `Stdlib::Filemode`
 
 The mode of the `facts_d_dir`.
 
 Default value: `'0755'`
 
-##### <a name="path_to_facter"></a>`path_to_facter`
+##### <a name="-facter--path_to_facter"></a>`path_to_facter`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -109,7 +109,7 @@ The path to the facter binary.
 
 Default value: `'/opt/puppetlabs/bin/facter'`
 
-##### <a name="path_to_facter_symlink"></a>`path_to_facter_symlink`
+##### <a name="-facter--path_to_facter_symlink"></a>`path_to_facter_symlink`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -117,15 +117,15 @@ Path to a symlink that points to the facter binary.
 
 Default value: `'/usr/local/bin/facter'`
 
-##### <a name="ensure_facter_symlink"></a>`ensure_facter_symlink`
+##### <a name="-facter--ensure_facter_symlink"></a>`ensure_facter_symlink`
 
 Data type: `Boolean`
 
 Boolean to determine if the symlink should be present.
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="facts_hash"></a>`facts_hash`
+##### <a name="-facter--facts_hash"></a>`facts_hash`
 
 Data type: `Hash`
 
@@ -133,7 +133,7 @@ A hash of `facter::fact` entries.
 
 Default value: `{}`
 
-##### <a name="structured_data_facts_hash"></a>`structured_data_facts_hash`
+##### <a name="-facter--structured_data_facts_hash"></a>`structured_data_facts_hash`
 
 Data type: `Hash`
 
@@ -141,7 +141,7 @@ A hash of `facter::structured_data_fact` entries.
 
 Default value: `{}`
 
-##### <a name="facts_file"></a>`facts_file`
+##### <a name="-facter--facts_file"></a>`facts_file`
 
 Data type: `Pattern[/\.txt*\Z/]`
 
@@ -150,7 +150,7 @@ end with '.txt'.
 
 Default value: `'facts.txt'`
 
-##### <a name="facts_file_owner"></a>`facts_file_owner`
+##### <a name="-facter--facts_file_owner"></a>`facts_file_owner`
 
 Data type: `String[1]`
 
@@ -158,7 +158,7 @@ The owner of the facts_file.
 
 Default value: `'root'`
 
-##### <a name="facts_file_group"></a>`facts_file_group`
+##### <a name="-facter--facts_file_group"></a>`facts_file_group`
 
 Data type: `String[1]`
 
@@ -166,15 +166,15 @@ The group of the facts_file.
 
 Default value: `'root'`
 
-##### <a name="facts_file_mode"></a>`facts_file_mode`
+##### <a name="-facter--facts_file_mode"></a>`facts_file_mode`
 
-Data type: `Optional[Stdlib::Filemode]`
+Data type: `Stdlib::Filemode`
 
 The mode of the facts_file.
 
 Default value: `'0644'`
 
-##### <a name="facter_conf_dir"></a>`facter_conf_dir`
+##### <a name="-facter--facter_conf_dir"></a>`facter_conf_dir`
 
 Data type: `Stdlib::Absolutepath`
 
@@ -182,7 +182,7 @@ The facter configuration directory
 
 Default value: `'/etc/puppetlabs/facter'`
 
-##### <a name="facter_conf_dir_owner"></a>`facter_conf_dir_owner`
+##### <a name="-facter--facter_conf_dir_owner"></a>`facter_conf_dir_owner`
 
 Data type: `String[1]`
 
@@ -190,7 +190,7 @@ The facter configuration directory owner
 
 Default value: `'root'`
 
-##### <a name="facter_conf_dir_group"></a>`facter_conf_dir_group`
+##### <a name="-facter--facter_conf_dir_group"></a>`facter_conf_dir_group`
 
 Data type: `String[1]`
 
@@ -198,7 +198,7 @@ The facter configuration directory group owner
 
 Default value: `'root'`
 
-##### <a name="facter_conf_dir_mode"></a>`facter_conf_dir_mode`
+##### <a name="-facter--facter_conf_dir_mode"></a>`facter_conf_dir_mode`
 
 Data type: `Stdlib::Filemode`
 
@@ -206,7 +206,7 @@ The facter configuration directory mode
 
 Default value: `'0755'`
 
-##### <a name="facter_conf_name"></a>`facter_conf_name`
+##### <a name="-facter--facter_conf_name"></a>`facter_conf_name`
 
 Data type: `String[1]`
 
@@ -214,7 +214,7 @@ The facter configuration file name
 
 Default value: `'facter.conf'`
 
-##### <a name="facter_conf_owner"></a>`facter_conf_owner`
+##### <a name="-facter--facter_conf_owner"></a>`facter_conf_owner`
 
 Data type: `String[1]`
 
@@ -222,7 +222,7 @@ The facter configuration file name owner
 
 Default value: `'root'`
 
-##### <a name="facter_conf_group"></a>`facter_conf_group`
+##### <a name="-facter--facter_conf_group"></a>`facter_conf_group`
 
 Data type: `String[1]`
 
@@ -230,7 +230,7 @@ The facter configuration file name group owner
 
 Default value: `'root'`
 
-##### <a name="facter_conf_mode"></a>`facter_conf_mode`
+##### <a name="-facter--facter_conf_mode"></a>`facter_conf_mode`
 
 Data type: `Stdlib::Filemode`
 
@@ -238,7 +238,7 @@ The facter configuration file name mode
 
 Default value: `'0644'`
 
-##### <a name="facter_conf"></a>`facter_conf`
+##### <a name="-facter--facter_conf"></a>`facter_conf`
 
 Data type: `Facter::Conf`
 
@@ -248,7 +248,7 @@ Default value: `{}`
 
 ## Defined types
 
-### <a name="facterfact"></a>`facter::fact`
+### <a name="facter--fact"></a>`facter::fact`
 
 Define txt based external facts
 
@@ -256,18 +256,18 @@ Define txt based external facts
 
 The following parameters are available in the `facter::fact` defined type:
 
-* [`value`](#value)
-* [`fact`](#fact)
-* [`file`](#file)
-* [`facts_dir`](#facts_dir)
+* [`value`](#-facter--fact--value)
+* [`fact`](#-facter--fact--fact)
+* [`file`](#-facter--fact--file)
+* [`facts_dir`](#-facter--fact--facts_dir)
 
-##### <a name="value"></a>`value`
+##### <a name="-facter--fact--value"></a>`value`
 
 Data type: `String[1]`
 
 Value of the fact.
 
-##### <a name="fact"></a>`fact`
+##### <a name="-facter--fact--fact"></a>`fact`
 
 Data type: `String[1]`
 
@@ -275,25 +275,25 @@ Name of the fact
 
 Default value: `$name`
 
-##### <a name="file"></a>`file`
+##### <a name="-facter--fact--file"></a>`file`
 
 Data type: `Optional[String[1]]`
 
 File in which the fact will be placed. If not specified, use the default
 facts file.
 
-Default value: ``undef``
+Default value: `undef`
 
-##### <a name="facts_dir"></a>`facts_dir`
+##### <a name="-facter--fact--facts_dir"></a>`facts_dir`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Directory in which the file will be placed. If not specified, use the
 default facts_d_dir.
 
-Default value: ``undef``
+Default value: `undef`
 
-### <a name="facterstructured_data_fact"></a>`facter::structured_data_fact`
+### <a name="facter--structured_data_fact"></a>`facter::structured_data_fact`
 
 Define YAML based external structured data facts.
 
@@ -301,17 +301,17 @@ Define YAML based external structured data facts.
 
 The following parameters are available in the `facter::structured_data_fact` defined type:
 
-* [`data`](#data)
-* [`file`](#file)
-* [`facts_dir`](#facts_dir)
+* [`data`](#-facter--structured_data_fact--data)
+* [`file`](#-facter--structured_data_fact--file)
+* [`facts_dir`](#-facter--structured_data_fact--facts_dir)
 
-##### <a name="data"></a>`data`
+##### <a name="-facter--structured_data_fact--data"></a>`data`
 
 Data type: `Hash[String[1], Data]`
 
 A hash of facts. All keys must be strings.
 
-##### <a name="file"></a>`file`
+##### <a name="-facter--structured_data_fact--file"></a>`file`
 
 Data type: `Pattern[/\.yaml*\Z/]`
 
@@ -319,18 +319,18 @@ File in which the fact will be placed. The file name must end with '.yaml'.
 
 Default value: `'facts.yaml'`
 
-##### <a name="facts_dir"></a>`facts_dir`
+##### <a name="-facter--structured_data_fact--facts_dir"></a>`facts_dir`
 
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Directory in which the file will be placed. If not specified, use the
 default facts_d_dir.
 
-Default value: ``undef``
+Default value: `undef`
 
 ## Data types
 
-### <a name="facterconf"></a>`Facter::Conf`
+### <a name="Facter--Conf"></a>`Facter::Conf`
 
 The Facter::Conf data type.
 
