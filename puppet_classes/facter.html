@@ -6,7 +6,7 @@
 <title>
   Puppet Class: facter
   
-    &mdash; Documentation by YARD 0.9.37
+    &mdash; Documentation by YARD 0.9.36
   
 </title>
 
@@ -82,6 +82,7 @@
 
   </div>
 </div>
+
 
 
 <div class="tags">
@@ -183,7 +184,7 @@
         <span class='name'>facts_d_mode</span>
       
       
-        <span class='type'>(<tt>Optional[Stdlib::Filemode]</tt>)</span>
+        <span class='type'>(<tt>Stdlib::Filemode</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>&#39;0755&#39;</tt>)</em>
@@ -345,7 +346,7 @@
         <span class='name'>facts_file_mode</span>
       
       
-        <span class='type'>(<tt>Optional[Stdlib::Filemode]</tt>)</span>
+        <span class='type'>(<tt>Stdlib::Filemode</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>&#39;0644&#39;</tt>)</em>
@@ -666,7 +667,13 @@
 211
 212
 213
-214</pre>
+214
+215
+216
+217
+218
+219
+220</pre>
       </td>
       <td>
         <pre class="code"><span class="info file"># File 'manifests/init.pp', line 79</span>
@@ -677,7 +684,7 @@ class facter (
   Stdlib::Absolutepath $facts_d_dir = &#39;/etc/facter/facts.d&#39;,
   String[1] $facts_d_owner = &#39;root&#39;,
   String[1] $facts_d_group = &#39;root&#39;,
-  Optional[Stdlib::Filemode] $facts_d_mode = &#39;0755&#39;,
+  Stdlib::Filemode $facts_d_mode = &#39;0755&#39;,
   Stdlib::Absolutepath $path_to_facter = &#39;/opt/puppetlabs/bin/facter&#39;,
   Stdlib::Absolutepath $path_to_facter_symlink = &#39;/usr/local/bin/facter&#39;,
   Boolean $ensure_facter_symlink = false,
@@ -686,7 +693,7 @@ class facter (
   Pattern[/\.txt*\Z/] $facts_file = &#39;facts.txt&#39;,
   String[1] $facts_file_owner = &#39;root&#39;,
   String[1] $facts_file_group = &#39;root&#39;,
-  Optional[Stdlib::Filemode] $facts_file_mode = &#39;0644&#39;,
+  Stdlib::Filemode $facts_file_mode = &#39;0644&#39;,
   Stdlib::Absolutepath $facter_conf_dir = &#39;/etc/puppetlabs/facter&#39;,
   String[1] $facter_conf_dir_owner = &#39;root&#39;,
   String[1] $facter_conf_dir_group = &#39;root&#39;,
@@ -700,11 +707,17 @@ class facter (
   if $facts[&#39;os&#39;][&#39;family&#39;] == &#39;windows&#39; {
     $facts_file_path  = &quot;${facts_d_dir}\\${facts_file}&quot;
     $facts_d_mode_real = undef
-    $facts_file_mode_real = undef
+    # Have to allow mode to be set as undef to concat will
+    # default to &#39;0644&#39; which could cause issues
+    $facts_file_mode_real = $facts_file_mode
+    $facter_conf_dir_mode_real = undef
+    $facter_conf_mode_real = undef
   } else {
     $facts_file_path  = &quot;${facts_d_dir}/${facts_file}&quot;
     $facts_d_mode_real = $facts_d_mode
     $facts_file_mode_real = $facts_file_mode
+    $facter_conf_dir_mode_real = $facter_conf_dir_mode
+    $facter_conf_mode_real = $facter_conf_mode
   }
 
   if $manage_facts_d_dir == true {
@@ -793,7 +806,7 @@ class facter (
     ensure  =&gt; &#39;directory&#39;,
     owner   =&gt; $facter_conf_dir_owner,
     group   =&gt; $facter_conf_dir_group,
-    mode    =&gt; $facter_conf_dir_mode,
+    mode    =&gt; $facter_conf_dir_mode_real,
     require =&gt; Exec[&quot;mkdir_p-${facter_conf_dir}&quot;],
   }
   if ! empty($facter_conf) {
@@ -802,7 +815,7 @@ class facter (
       ensure  =&gt; &#39;file&#39;,
       owner   =&gt; $facter_conf_owner,
       group   =&gt; $facter_conf_group,
-      mode    =&gt; $facter_conf_mode,
+      mode    =&gt; $facter_conf_mode_real,
       content =&gt; &quot;# File managed by Puppet, do not edit\n${facter_conf_json}&quot;,
     }
   }
