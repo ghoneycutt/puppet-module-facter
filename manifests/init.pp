@@ -82,7 +82,7 @@ class facter (
   Stdlib::Absolutepath $facts_d_dir = '/etc/facter/facts.d',
   String[1] $facts_d_owner = 'root',
   String[1] $facts_d_group = 'root',
-  Optional[Stdlib::Filemode] $facts_d_mode = '0755',
+  Stdlib::Filemode $facts_d_mode = '0755',
   Stdlib::Absolutepath $path_to_facter = '/opt/puppetlabs/bin/facter',
   Stdlib::Absolutepath $path_to_facter_symlink = '/usr/local/bin/facter',
   Boolean $ensure_facter_symlink = false,
@@ -91,7 +91,7 @@ class facter (
   Pattern[/\.txt*\Z/] $facts_file = 'facts.txt',
   String[1] $facts_file_owner = 'root',
   String[1] $facts_file_group = 'root',
-  Optional[Stdlib::Filemode] $facts_file_mode = '0644',
+  Stdlib::Filemode $facts_file_mode = '0644',
   Stdlib::Absolutepath $facter_conf_dir = '/etc/puppetlabs/facter',
   String[1] $facter_conf_dir_owner = 'root',
   String[1] $facter_conf_dir_group = 'root',
@@ -105,11 +105,17 @@ class facter (
   if $facts['os']['family'] == 'windows' {
     $facts_file_path  = "${facts_d_dir}\\${facts_file}"
     $facts_d_mode_real = undef
-    $facts_file_mode_real = undef
+    # Have to allow mode to be set as undef to concat will
+    # default to '0644' which could cause issues
+    $facts_file_mode_real = $facts_file_mode
+    $facter_conf_dir_mode_real = undef
+    $facter_conf_mode_real = undef
   } else {
     $facts_file_path  = "${facts_d_dir}/${facts_file}"
     $facts_d_mode_real = $facts_d_mode
     $facts_file_mode_real = $facts_file_mode
+    $facter_conf_dir_mode_real = $facter_conf_dir_mode
+    $facter_conf_mode_real = $facter_conf_mode
   }
 
   if $manage_facts_d_dir == true {
@@ -198,7 +204,7 @@ class facter (
     ensure  => 'directory',
     owner   => $facter_conf_dir_owner,
     group   => $facter_conf_dir_group,
-    mode    => $facter_conf_dir_mode,
+    mode    => $facter_conf_dir_mode_real,
     require => Exec["mkdir_p-${facter_conf_dir}"],
   }
   if ! empty($facter_conf) {
@@ -207,7 +213,7 @@ class facter (
       ensure  => 'file',
       owner   => $facter_conf_owner,
       group   => $facter_conf_group,
-      mode    => $facter_conf_mode,
+      mode    => $facter_conf_mode_real,
       content => "# File managed by Puppet, do not edit\n${facter_conf_json}",
     }
   }
