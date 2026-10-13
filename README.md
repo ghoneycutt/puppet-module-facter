@@ -108,9 +108,9 @@ Please consult the `REFERENCE.md` file for all parameters.
 
 ## Limitations
 
-This module is compatible with the latest release of Puppet versions 5
-and 6. It supports all POSIX like platforms as well as Windows. See
-`.travis.yml` for an exact matrix of tested Ruby and Puppet versions.
+This module is compatible with the latest releases of OpenVox, see
+`metadata.json` for specifics.  It supports all POSIX like platforms as well as
+Windows.
 
 ## Development
 
