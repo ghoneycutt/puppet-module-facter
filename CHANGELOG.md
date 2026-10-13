@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v6.0.0](https://github.com/ghoneycutt/puppet-module-facter/tree/v6.0.0) (2026-10-13)
+
+[Full Changelog](https://github.com/ghoneycutt/puppet-module-facter/compare/v5.0.1...v6.0.0)
+
+### Merged pull requests:
+
+- Adopt OpenVox 8 and 9 [\#77](https://github.com/ghoneycutt/puppet-module-facter/pull/77) ([ghoneycutt](https://github.com/ghoneycutt))
+
 ## [v5.0.1](https://github.com/ghoneycutt/puppet-module-facter/tree/v5.0.1) (2025-04-22)
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-facter/compare/v5.0.0...v5.0.1)
@@ -84,10 +92,6 @@ All notable changes to this project will be documented in this file. The format 
 ## [v3.1.0](https://github.com/ghoneycutt/puppet-module-facter/tree/v3.1.0) (2015-12-11)
 
 [Full Changelog](https://github.com/ghoneycutt/puppet-module-facter/compare/v3.0.0...v3.1.0)
-
-### Merged pull requests:
-
-- Feature hiera merge for facts::facts\_hash [\#42](https://github.com/ghoneycutt/puppet-module-facter/pull/42) ([philippvh](https://github.com/philippvh))
 
 ## [v3.0.0](https://github.com/ghoneycutt/puppet-module-facter/tree/v3.0.0) (2015-11-04)
 

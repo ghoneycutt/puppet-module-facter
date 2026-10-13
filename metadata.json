@@ -1,6 +1,6 @@
 {
   "name": "ghoneycutt-facter",
-  "version": "5.0.1",
+  "version": "6.0.0",
   "author": "ghoneycutt",
   "summary": "Manage Facter",
   "license": "Apache-2.0",
